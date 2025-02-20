@@ -1,8 +1,10 @@
 <?php
-header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET");
-header("Access-Control-Allow-Headers: Content-Type");
+if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
+    header("Content-Type: application/json");
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: GET");
+    header("Access-Control-Allow-Headers: Content-Type");
+}
 
 include_once "../config/config.php";
 
@@ -11,24 +13,26 @@ if (isset($_GET["start-date"], $_GET["end-date"])) {
     $endDate = $_GET["end-date"];
     //$pax = intval($_GET["pax"]);
 
-    // Validate dates (Check-In should be before Check-Out)
     if ($startDate >= $endDate) {
         echo json_encode(["error" => "Check-Out date must be after Check-In date"]);
         exit;
     }
 
-    // Query for available rooms
     $stmt = $conn->prepare("
-        SELECT room.roomID, room.roomType
+        SELECT room.roomType, room.roomPackage
         FROM booking 
-        INNER JOIN pricing 
+        LEFT JOIN pricing 
             ON booking.pricingID = pricing.pricingID
         RIGHT JOIN room 
             ON pricing.roomID = room.roomID
-        WHERE booking.bookingID IS NULL AND booking.bookingDate BETWEEN ? AND ?;
+        WHERE booking.bookingID NOT IN (
+                SELECT bookingID 
+                FROM booking 
+                WHERE bookingDate BETWEEN ? AND ?
+            );
     ");
 
-    $stmt->bind_param("ss", $endDate, $startDate);
+    $stmt->bind_param("ss", $startDate, $endDate);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -36,6 +40,10 @@ if (isset($_GET["start-date"], $_GET["end-date"])) {
     echo json_encode($availableRooms);
 } else {
     echo json_encode(["error" => "Missing required parameters", "start-date" => $_GET["start-date"], "end-date" => $_GET["end-date"]]);
+}
+
+if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
+    echo json_encode($availableRooms);
 }
 
 $conn->close();
