@@ -1,5 +1,14 @@
 <?php
+session_start();
+session_destroy();
+session_start();
+
+$title = "Available Rooms";
 include "../includes/header.php";
+
+$cart = $_SESSION['cart'] ?? [];
+$availableRooms = [];
+
 if (isset($_GET["start-date"], $_GET["end-date"])){
     $startDate = $_GET["start-date"];
     $endDate = $_GET["end-date"];
@@ -9,23 +18,46 @@ if (isset($_GET["start-date"], $_GET["end-date"])){
     $jsonOutput = ob_get_clean();
 
     $availableRooms = json_decode($jsonOutput, true) ?? [];
+
+    $availableRooms = array_filter($availableRooms, function ($room) use ($cart) {
+      return !in_array($room['roomType'], array_column($cart, 'roomType'));
+  });
 }
 ?>
 
-<table>
-  <tr>
-    <th>Room</th>
-    <th>Type</th>
-    <th>Book</th>
-  </tr>
-  <?php foreach ($availableRooms as $room) : ?>
-      <tr>
-          <td><?php echo htmlspecialchars($room['roomType']); ?></td>
-          <td><?php echo htmlspecialchars($room['roomPackage']); ?></td>
-      </tr>
-  <?php endforeach; ?>
+<h2>Available Rooms</h2>
+<table id="available-rooms">
+  <thead>
+    <tr>
+      <th>Room</th>
+      <th>Type</th>
+      <th>Occupancy Type</th>
+      <th>Max Pax</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+<tbody>
+</tbody>
 </table>
 
-<?php
-include "../includes/footer.php"
-?>
+
+<h2>Your Cart</h2>
+<table id="in-cart">
+  <thead>
+    <tr>
+      <th>Room</th>
+      <th>Type</th>
+      <th>Occupancy Type</th>
+      <th>Max Pax</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>  
+</table>
+
+<button id="checkout">Proceed to Booking</button>
+
+<script src="../scripts/availableRooms.js"></script>
+
+<?php include "../includes/footer.php"; ?>

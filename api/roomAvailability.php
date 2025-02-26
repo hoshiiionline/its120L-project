@@ -19,17 +19,21 @@ if (isset($_GET["start-date"], $_GET["end-date"])) {
     }
 
     $stmt = $conn->prepare("
-        SELECT room.roomType, room.roomPackage
+        SELECT *
         FROM booking 
-        LEFT JOIN pricing 
+        RIGHT JOIN pricing 
             ON booking.pricingID = pricing.pricingID
         RIGHT JOIN room 
             ON pricing.roomID = room.roomID
+        INNER JOIN occupancy
+            on pricing.occupancyID = occupancy.occupancyID
         WHERE booking.bookingID NOT IN (
                 SELECT bookingID 
                 FROM booking 
                 WHERE bookingDate BETWEEN ? AND ?
-            );
+            )
+        GROUP BY room.roomType, occupancy.occupancyType, occupancy.occupancyType
+        ORDER BY occupancy.occupancyMax;
     ");
 
     $stmt->bind_param("ss", $startDate, $endDate);
@@ -37,7 +41,6 @@ if (isset($_GET["start-date"], $_GET["end-date"])) {
     $result = $stmt->get_result();
 
     $availableRooms = $result->fetch_all(MYSQLI_ASSOC);
-    echo json_encode($availableRooms);
 } else {
     echo json_encode(["error" => "Missing required parameters", "start-date" => $_GET["start-date"], "end-date" => $_GET["end-date"]]);
 }
