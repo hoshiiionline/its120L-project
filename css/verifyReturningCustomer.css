@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.background1 {
+    background-image: url("../assets/view1blur.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.container {
+    background: white;
+    padding: 2.5em;
+    text-align: center;
+    margin: auto;
+    width: 40%;
+    border-radius: 2em;
+}
+
+h2 {
+    color: #425D8A;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 2.5em;
+    margin-top: 1em;
+    margin-bottom: 0;
+}
+
+h3 {
+    color: #6884AC;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.6em;
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+a {
+    text-decoration: none;
+}
+
+.back {
+    padding-left: 0.8em;
+    text-align: left;
+    color: #6884AC;
+}
+
+.back:hover {
+    color: #425D8A;
+    font-weight: bold;
+}
+
+label {
+    font-size: 1em;
+    font-weight: 400;
+    color: #6884AC;
+    margin-bottom: 0.3em;
+    align-self: flex-start;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.8em;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+button {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.8em;
+    font-size: 1em;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    background-color: #6884AC;
+    transition: background 0.3s ease;
+    margin-bottom: 1em;
+}
+
+button:hover {
+    background-color: #425D8A;
+}

@@ -5,7 +5,8 @@ $password = "";
 $dbname = "banahawCircle";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname, null, '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock');
+$conn = new mysqli($servername, $username, $password, $dbname);
+//maxine: removed null, '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock');
 
 // Check connection
 if ($conn->connect_error) {
