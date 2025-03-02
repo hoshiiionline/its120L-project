@@ -24,40 +24,53 @@ if (isset($_GET["start-date"], $_GET["end-date"])){
   });
 }
 ?>
-
-<h2>Available Rooms</h2>
-<table id="available-rooms">
-  <thead>
-    <tr>
-      <th>Room</th>
-      <th>Type</th>
-      <th>Occupancy Type</th>
-      <th>Max Pax</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-<tbody>
-</tbody>
-</table>
-
-
-<h2>Your Cart</h2>
-<table id="in-cart">
-  <thead>
-    <tr>
-      <th>Room</th>
-      <th>Type</th>
-      <th>Occupancy Type</th>
-      <th>Max Pax</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-  </tbody>  
-</table>
-
-<button id="checkout">Proceed to Booking</button>
+<br />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+        <h2>Available Rooms</h2>
+        <table id="available-rooms" class="table table-striped">
+          <thead>
+            <tr>
+              <th>Room</th>
+              <th>Type</th>
+              <th>Occupancy Type</th>
+              <th>Max Pax</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+        <tbody>
+        </tbody>
+        </table>        
+        <br>
+        <button id="checkout">Proceed to Booking</button>
+      </div>
+        <div class="col-lg-6">
+        <h2>Your Cart</h2>
+        <table id="in-cart" class="table table-striped">
+          <thead>
+            <tr>
+              <th>Room</th>
+              <th>Type</th>
+              <th>Occupancy Type</th>
+              <th>Max Pax</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>  
+        </table>
+      </div>
+    </div>
+</div>
 
 <script src="../scripts/availableRooms.js"></script>
+<script> 
+  document.getElementById("checkout").addEventListener("click", function () {
+
+    // Redirect with query parameters (GET method)
+    window.location.href = 'crm.php';
+});
+</script>
 
 <?php include "../includes/footer.php"; ?>

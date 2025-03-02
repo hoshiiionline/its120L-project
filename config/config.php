@@ -2,10 +2,10 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "banahawCircle";
+$dbname = "HotelBookingDB";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname, null, '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock');
 //maxine: removed null, '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock');
 
 // Check connection
