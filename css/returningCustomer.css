@@ -81,14 +81,3 @@ a {
     font-weight: bold;
 }
 
-.footer {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    font-size: 1vw;
-    font-weight: 100;
-    font-style: normal;
-    color: white;
-    margin-right: 2vw;
-    margin-bottom: 1vw;
-}

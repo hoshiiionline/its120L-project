@@ -1,5 +1,6 @@
 <?php
 require '../config/config.php';
+$title = "Customer Selection";
 
 if(isset($_GET['signal'])){
     $signal = $_GET['signal'];
@@ -11,22 +12,22 @@ if(isset($_GET['signal'])){
         echo "Invalid signal!";
     }
 }
-
+include "../includes/header.php";
 ?>
 
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Selection</title>
+    <title>Customer Selection</title>-->
     <link rel="stylesheet" href="../css/returningCustomer.css">
 
 </head>
 <body class="background1">
 <div class="container">
     <div><img src="../assets/logoflat.png" width="30%"></div>
-    <h2>BOOK A ROOM</h2>
+    <h2>INQUIRE ABOUT A ROOM'S AVAILABILITY</h2>
     <h3>Reconnect with nature and spirit—book your stay with us for a rejuvenating retreat of healing, reflection, and inspiration.</h3>
     <div class="options">
         <div class="option-container">
@@ -40,8 +41,10 @@ if(isset($_GET['signal'])){
             </a>
         </div>
     </div>
+    <br>
     <div style="text-align:left"><a class="back" href="https://banahawcircle.com/">< Back</a></div>
 </div>
-<div class="footer">© 2025 Banahaw Circle Nature Retreat</div>
+<?php include "../includes/footer.php"; ?>
+<!--<div class="footer">© 2025 Banahaw Circle Nature Retreat</div>
 </body>
-</html>
+</html>-->

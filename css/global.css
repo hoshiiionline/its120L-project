@@ -1,0 +1,35 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    font-size: 1vw;
+    font-weight: 100;
+    font-style: normal;
+    color: white;
+    margin-right: 2vw;
+    margin-bottom: 1vw;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+  
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }

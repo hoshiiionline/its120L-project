@@ -1,12 +1,7 @@
 <?php
-session_start(); // Ensure the session is started
-
 $title = "CRM";
 $cart = $_SESSION['cart'] ?? [];
 include "../includes/header.php";
-
-// Ensure $conn is defined (either in header or include your connection file)
-// require_once '../includes/db_connect.php';
 
 date_default_timezone_set('Asia/Manila');
 $today = date('Y-m-d');

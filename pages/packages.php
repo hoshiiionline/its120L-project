@@ -1,15 +1,21 @@
 <?php
+session_start();
+$title = "Package Selection";
 if(isset($_GET['signal'])){
-    $signal = $_GET['signal'];
-
-}
-
+   	$signal = $_GET['signal'];
+		 $_SESSION['package'] = $signal;
+		 echo $_SESSION['package'];
+		 header('Location: ../pages/roomAvailability.php');
+		 } else {
+				 $_SESSION['package'] = 'invalid';
+		 }
+//include "../includes/header.php";
 ?>
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->	
     <title>Package Selection</title>
     <link rel="stylesheet" href="../css/packages.css">
 </head>
@@ -36,6 +42,4 @@ if(isset($_GET['signal'])){
     </div>
     <div style="text-align:left"><a class="back" href="../pages/returningCustomer.php">< Back</a></div>
 </div>
-<div class="footer">© 2025 Banahaw Circle Nature Retreat</div>
-</body>
-</html>
+<?php include "../includes/footer.php"; ?>

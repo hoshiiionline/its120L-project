@@ -1,5 +1,8 @@
 <?php
-include "../includes/header.php"
+$title = "Room Availability";
+include "../includes/header.php";
+$signal = $_SESSION['package'];
+echo $signal;
 ?>
 
 <label for="Check-In">Check-In:</label>
