@@ -21,11 +21,15 @@ if (isset($_GET["start-date"], $_GET["end-date"])){
   });
 }
 ?>
-<br />
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-6">
-        <h2>Available Rooms</h2>
+
+<link rel="stylesheet" href="../css/availableRooms.css">
+<body class="background1">
+<div class="wrap">
+  <div class="row1">
+    <!-- Left Container: Available Rooms -->
+    <div class="col-lg-6 container left-container">
+      <h2>Available Rooms</h2>
+      <div class="scrollable-content">
         <table id="available-rooms" class="table table-striped">
           <thead>
             <tr>
@@ -36,14 +40,15 @@ if (isset($_GET["start-date"], $_GET["end-date"])){
               <th>Action</th>
             </tr>
           </thead>
-        <tbody>
-        </tbody>
-        </table>        
-        <br>
-        <button id="checkout">Proceed to Booking</button>
+          <tbody>
+          </tbody>
+        </table>
       </div>
-        <div class="col-lg-6">
-        <h2>Your Cart</h2>
+    </div>
+    
+    <div class="col-lg-6 container right-container">
+      <h2>Your Cart</h2>
+      <div class="scrollable-content">
         <table id="in-cart" class="table table-striped">
           <thead>
             <tr>
@@ -58,16 +63,22 @@ if (isset($_GET["start-date"], $_GET["end-date"])){
           </tbody>  
         </table>
       </div>
+      <div class="fixed-footer">
+        <button id="checkout-cart" class="proceed">Proceed to Booking</button>
+        <div style="text-align:left">
+          <a class="back" href="https://banahawcircle.com/">< Back</a>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
+
 <script src="../scripts/availableRooms.js"></script>
-<script> 
-  document.getElementById("checkout").addEventListener("click", function () {
-
-    // Redirect with query parameters (GET method)
-    window.location.href = 'crm.php';
-});
+<script>
+    document.getElementById("checkout-cart").addEventListener("click", function () {
+        // Redirect with query parameters (GET method)
+        window.location.href = 'crm.php';
+    });
 </script>
-
 <?php include "../includes/footer.php"; ?>

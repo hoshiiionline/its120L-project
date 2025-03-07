@@ -2,10 +2,37 @@
 $title = "Room Availability";
 include "../includes/header.php";
 $signal = $_SESSION['package'];
-echo $signal;
+//echo $signal;
 ?>
 
-<label for="Check-In">Check-In:</label>
+<link rel="stylesheet" href="../css/roomAvailability.css">
+</head>
+<body class="background1">
+<div class="container">
+    <h2>Input Details</h2>
+    <div class="form">
+        <div class="form-group">
+            <label for="start-date">Check In:</label>
+            <input type="date" id="start-date" name="start-date">
+        </div>
+        <div class="form-group">
+            <label for="end-date">Check Out:</label>
+            <input type="date" id="end-date" name="end-date">
+        </div>
+    </div>
+
+    <div class="form2">
+        <label for="pax">No. Of Pax:</label>
+        <input type="number" id="pax" name="pax" min="1" required>
+    </div>
+
+    <div class="form2">
+        <button id="query-btn" class="button">Submit</button>
+    </div>
+    <div style="text-align:left"><a class="back" href="../pages/returningCustomer.php">< Back</a></div>
+</div>
+
+<!--<label for="Check-In">Check-In:</label>
 <input type="date" id="start-date" name="start-date">
 
 <label for="Check-Out">Check-Out:</label>
@@ -14,7 +41,7 @@ echo $signal;
 <label for="pax">No. of Pax:</label>
 <input type="number" id="pax" name="pax" min="1" required>
 
-<button id="query-btn">Submit</button>
+<button id="query-btn">Submit</button>-->
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
