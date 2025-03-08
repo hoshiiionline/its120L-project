@@ -7,9 +7,10 @@ $cart = $_SESSION['cart'] ?? [];
 $availableRooms = [];
 $signal = $_SESSION['package'] ?? 'invalid';
 
-if (isset($_GET["start-date"], $_GET["end-date"])){
+if (isset($_GET["start-date"], $_GET["end-date"], $_GET["pax"])){
     $startDate = $_GET["start-date"];
     $endDate = $_GET["end-date"];
+    $noPax = intval($_GET["pax"]);
 
     ob_start();
     include "../api/roomAvailability.php";
@@ -86,7 +87,11 @@ if (isset($_GET["start-date"], $_GET["end-date"])){
 <script>
     document.getElementById("checkout-cart").addEventListener("click", function () {
         // Redirect with query parameters (GET method)
-        window.location.href = 'crm.php';
+        const urlParams = new URLSearchParams(window.location.search);
+        const startDate = urlParams.get("start-date"); 
+        const endDate = urlParams.get("end-date"); 
+
+        window.location.href = "crm.php?start-date=" + encodeURIComponent(startDate) + "&end-date=" + encodeURIComponent(endDate);
     });
 </script>
 <?php include "../includes/footer.php"; ?>

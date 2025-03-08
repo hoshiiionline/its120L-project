@@ -1,10 +1,14 @@
 <?php
 $title = "CRM";
-$cart = $_SESSION['cart'] ?? [];
 include "../includes/header.php";
+$cart = $_SESSION['cart'] ?? [];
 
-date_default_timezone_set('Asia/Manila');
-$today = date('Y-m-d');
+//print_r( $_SESSION['cart']);
+
+if (isset($_GET["start-date"], $_GET["end-date"])) {
+  $startDate = $_GET["start-date"];
+  $endDate = $_GET["end-date"];
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // Use the same key ("phone") consistently
@@ -22,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Execute the statement
     if ($stmt->execute()) {
-      echo "<div class='alert alert-success'>Booking successfully submitted!</div>";
+      echo "<div class='alert alert-success'>Yess successfully submitted!</div>";
     } else {
       echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
     }
@@ -39,12 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $stmt->execute();
   $result = $stmt->get_result();
   $customerID = $result->fetch_assoc()['customerID'];
+  echo "<div class='alert alert-success'>Here is my $customerID</div>";
   $stmt->close();
 
   foreach ($cart as $item) {
     $pricingID = $item['pricingID'];
-    $stmt = $conn->prepare("INSERT INTO booking (customerID, pricingID, bookingDate, paymentMethod) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("iiss", $customerID, $pricingID, $today, $specialRequests);
+    $stmt = $conn->prepare("INSERT INTO booking (customerID, pricingID, dateReservedStart, dateReservedEnd) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("iiss", $customerID, $pricingID, $startDate, $endDate);
     $stmt->execute();
     $stmt->close();
   }
@@ -58,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- CRM Form -->
       <div class="container">
           <h2>Hotel Booking Form</h2>
-          <form action="crm.php" method="POST">
+          <form method="POST">
           <div class="form">
               <div class="form-group">
                   <label for="firstName">First Name</label>

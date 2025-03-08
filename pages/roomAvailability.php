@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("query-btn").addEventListener("click", function () {
     let startDate = document.getElementById("start-date").value;
     let endDate = document.getElementById("end-date").value;
+    let noPax = document.getElementById("pax").value;
 
     if (!endDate) {
         alert("Please select a date before submitting.");
@@ -73,7 +74,7 @@ document.getElementById("query-btn").addEventListener("click", function () {
     }
 
     // Redirect with query parameters (GET method)
-    window.location.href = "availableRooms.php?start-date=" + encodeURIComponent(startDate) + "&end-date=" + encodeURIComponent(endDate);
+    window.location.href = "availableRooms.php?start-date=" + encodeURIComponent(startDate) + "&end-date=" + encodeURIComponent(endDate)+ "&pax=" + encodeURIComponent(noPax);
 });
 </script>
 
