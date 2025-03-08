@@ -62,8 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   foreach ($cart as $item) {
     $pricingID = $item['pricingID'];
-    $stmt = $conn->prepare("INSERT INTO booking (customerID, pricingID, dateReservedStart, dateReservedEnd) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("iiss", $customerID, $pricingID, $startDate, $endDate);
+    $stmt = $conn->prepare("INSERT INTO booking (customerID, pricingID, dateReservedStart, dateReservedEnd, additionalRequests) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("iisss", $customerID, $pricingID, $startDate, $endDate, $specialRequests);
     $stmt->execute();
     $stmt->close();
   }

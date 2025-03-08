@@ -19,22 +19,14 @@ if (isset($_GET["start-date"], $_GET["end-date"], $_GET["pax"])) {
     }
 
     $stmt = $conn->prepare("
-        SELECT *
-        FROM booking 
-        RIGHT JOIN pricing 
-            ON booking.pricingID = pricing.pricingID
-        RIGHT JOIN room 
-            ON pricing.roomID = room.roomID
-        INNER JOIN occupancy
-            on pricing.occupancyID = occupancy.occupancyID
-        WHERE booking.bookingID NOT IN (
-                SELECT bookingID 
-                FROM booking 
-                WHERE dateReservedStart <= ? OR dateReservedEnd >= ?
-            )
-        AND
-        occupancy.occupancyMax >= ?
-        GROUP BY room.roomType, occupancy.occupancyType, occupancy.occupancyType
+        SELECT room.*, pricing.*, occupancy.*
+        FROM pricing
+        INNER JOIN room ON pricing.roomID = room.roomID
+        INNER JOIN occupancy ON pricing.occupancyID = occupancy.occupancyID
+        LEFT JOIN booking ON pricing.pricingID = booking.pricingID 
+            AND booking.dateReservedStart <= ?
+            AND booking.dateReservedEnd >= ?
+        WHERE booking.bookingID IS NULL and occupancy.occupancyMax >= ?
         ORDER BY occupancy.occupancyMax;
     ");
 

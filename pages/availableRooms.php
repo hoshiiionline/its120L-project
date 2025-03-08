@@ -10,8 +10,6 @@ $signal = $_SESSION['package'] ?? 'invalid';
 $startDate = $_SESSION['startDate'] ?? null;
 $endDate = $_SESSION['endDate'] ?? null;
 
-
-
 if (isset($_GET["start-date"], $_GET["end-date"], $_GET["pax"])) {
     $startDate = $_GET["start-date"] ?? $startDate;
     $endDate = $_GET["end-date"] ?? $endDate;

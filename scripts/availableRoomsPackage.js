@@ -54,10 +54,26 @@ function removeFromCart(roomType) {
     .catch((error) => console.error("Error:", error));
 }
 
+function getQueryParams() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    startDate: params.get("start-date"),
+    endDate: params.get("end-date"),
+    pax: params.get("pax"),
+  };
+}
+
 function reloadRooms() {
+  const { startDate, endDate, pax } = getQueryParams();
+
+  if (!startDate || !endDate || !pax) {
+      console.error("Missing parameters: start-date, end-date, or pax.");
+      return;
+  }
+
   Promise.all([
     fetch(
-      `../api/roomAvailability.php?start-date=2025-03-06&end-date=2025-03-08`
+      `../api/roomAvailability.php?start-date=${startDate}&end-date=${endDate}&pax=${pax}`
     ).then((response) => response.json()),
     fetch("../api/getCart.php").then((response) => response.json()),
   ])
