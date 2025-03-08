@@ -7,10 +7,19 @@ $cart = $_SESSION['cart'] ?? [];
 $availableRooms = [];
 $signal = $_SESSION['package'] ?? 'invalid';
 
-if (isset($_GET["start-date"], $_GET["end-date"], $_GET["pax"])){
-    $startDate = $_GET["start-date"];
-    $endDate = $_GET["end-date"];
+$startDate = $_SESSION['startDate'] ?? null;
+$endDate = $_SESSION['endDate'] ?? null;
+
+
+
+if (isset($_GET["start-date"], $_GET["end-date"], $_GET["pax"])) {
+    $startDate = $_GET["start-date"] ?? $startDate;
+    $endDate = $_GET["end-date"] ?? $endDate;
     $noPax = intval($_GET["pax"]);
+
+    $_SESSION['startDate'] = $startDate;
+    $_SESSION['endDate'] = $endDate;
+    $_SESSION['pax'] = $noPax;
 
     ob_start();
     include "../api/roomAvailability.php";
@@ -21,7 +30,15 @@ if (isset($_GET["start-date"], $_GET["end-date"], $_GET["pax"])){
     $availableRooms = array_filter($availableRooms, function ($room) use ($cart) {
       return !in_array($room['roomType'], array_column($cart, 'roomType'));
   });
+} else if (isset($_SESSION["startDate"], $_SESSION["endDate"], $_SESSION["pax"])) {
+  echo "works!";
+  $startDate = $_SESSION["startDate"];
+  $endDate = $_SESSION["endDate"];
+  ob_start();
+  include "../api/roomAvailability.php";  
 }
+
+
 ?>
 
 <link rel="stylesheet" href="../css/availableRooms.css">
