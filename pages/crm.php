@@ -76,13 +76,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </div>
 
           <div class="form2">
-              <label for="phone">Phone Number</label>
+              <label for="phone" text-align="left">Phone Number</label>
               <input type="tel" id="phone" name="phone" placeholder="1234567890" required>
           </div>
 
+          <div class="form3">
+          <label for="inlineRadioOptions" style="text-align: left;">Dietary Preference</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="regular">
+            <label class="form-check-label" for="inlineRadio1">Regular</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="vegetarian">
+            <label class="form-check-label" for="inlineRadio2">Vegetarian</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="others">
+            <label class="form-check-label" for="inlineRadio3">Others</label>
+          </div>
+          </div>
+          
           <div class="form2">
               <label for="specialRequests">Special Requests</label>
-              <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any additional details..."></textarea>
+              <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any additional details... (i.e. Allergies, etc.)"></textarea>
           </div>
           <div class="form2">
               <button id="query-btn" class="submit">Submit</button>

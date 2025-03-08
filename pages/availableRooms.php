@@ -5,6 +5,7 @@ include "../includes/header.php";
 
 $cart = $_SESSION['cart'] ?? [];
 $availableRooms = [];
+$signal = $_SESSION['package'] ?? 'invalid';
 
 if (isset($_GET["start-date"], $_GET["end-date"])){
     $startDate = $_GET["start-date"];
@@ -37,6 +38,7 @@ if (isset($_GET["start-date"], $_GET["end-date"])){
               <th>Type</th>
               <th>Occupancy Type</th>
               <th>Max Pax</th>
+              <th>Price</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -56,6 +58,7 @@ if (isset($_GET["start-date"], $_GET["end-date"])){
               <th>Type</th>
               <th>Occupancy Type</th>
               <th>Max Pax</th>
+              <th>Price</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -66,15 +69,20 @@ if (isset($_GET["start-date"], $_GET["end-date"])){
       <div class="fixed-footer">
         <button id="checkout-cart" class="proceed">Proceed to Booking</button>
         <div style="text-align:left">
-          <a class="back" href="https://banahawcircle.com/">< Back</a>
+          <a class="back" href="roomAvailability.php">< Back</a>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-
-<script src="../scripts/availableRooms.js"></script>
+<?php if ($signal === 'package') {
+  echo '<script src="../scripts/availableRoomsPackage.js"></script>';
+} else {
+  echo '<script src="../scripts/availableRooms.js"></script>';
+}
+?>
+ 
 <script>
     document.getElementById("checkout-cart").addEventListener("click", function () {
         // Redirect with query parameters (GET method)

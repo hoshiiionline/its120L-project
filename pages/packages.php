@@ -24,14 +24,14 @@ if(isset($_GET['signal'])){
     <div><img src="../assets/logoflat.png" width="30%"></div>
     <h2>SELECT A PACKAGE</h2>
     <div class="options">
-        <a href="../pages/packages.php?signal=nature">
+        <a href="../pages/packages.php?signal=package">
             <div class="option-container" style="background-image: url(../assets/naturevilla.png);">
-                <div class="label">Nature Villa<br>Stay Packages</div>
+                <div class="label">Room Packages</div>
             </div>
         </a>
-        <a href="../pages/packages.php?signal=art">
+        <a href="../pages/packages.php?signal=room">
             <div class="option-container" style="background-image: url(../assets/arthouse.png);">
-                <div class="label">Art House<br>Stay Packages</div>
+                <div class="label">Room Only</div>
             </div>
         </a>
         <a href="../pages/packages.php?signal=tour">

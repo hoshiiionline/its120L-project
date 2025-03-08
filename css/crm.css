@@ -104,6 +104,14 @@ a {
   padding-bottom: 1em;
 }
 
+.form3 {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  gap: 2em;
+  margin: auto;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -133,7 +141,7 @@ textarea {
 
 label {
   font-size: 1em;
-  font-weight: 400;
+  font-weight: 600;
   color: #6884ac;
   margin-bottom: 0.3em;
   align-self: flex-start;

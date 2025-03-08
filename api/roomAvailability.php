@@ -30,7 +30,7 @@ if (isset($_GET["start-date"], $_GET["end-date"])) {
         WHERE booking.bookingID NOT IN (
                 SELECT bookingID 
                 FROM booking 
-                WHERE bookingDate BETWEEN ? AND ?
+                WHERE dateReservedStart <= ? OR dateReservedEnd >= ?
             )
         GROUP BY room.roomType, occupancy.occupancyType, occupancy.occupancyType
         ORDER BY occupancy.occupancyMax;

@@ -16,12 +16,12 @@ function loadCart() {
                     <td>${room.roomPackage}</td>
                     <td>${room.occupancyType}</td>
                     <td>${room.occupancyMax}</td>
-                    <td>${room.pricingRateRoom}</td>
+                    <td>${room.pricingRatePackage}</td>
                     <td>
                         <img class="remove-from-cart"
-                        data-room="${room.roomType}"
-                        src="../assets/minus.png"
-                        alt="Remove from Cart" width=30 height=30>
+                    data-room="${room.roomType}"
+                    src="../assets/minus.png"
+                    alt="Remove from Cart" width=30 height=30>
                     </td>
                 `;
         cartTable.appendChild(row);
@@ -85,13 +85,9 @@ function reloadRooms() {
                 <td>${room.roomPackage}</td>
                 <td>${room.occupancyType}</td>
                 <td>${room.occupancyMax}</td>
-                <td>${room.pricingRateRoom}</td>
+                <td>${room.pricingRatePackage}</td>
                 <td>
-                    <img class="remove-from-cart"
-                    data-room="${room.roomType}"
-                    src="../assets/minus.png"
-                    alt="Remove from Cart" width=30 height=30>
-                    <img class="add-to-cart" 
+                <img class="add-to-cart" 
                     data-room='${JSON.stringify(room)}' 
                     src="../assets/plus.png" 
                     alt="Add to Cart" width=30 height=30>
