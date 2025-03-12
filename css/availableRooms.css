@@ -91,7 +91,8 @@ a {
 }
 
 .left-container,
-.right-container {
+.right-container,
+.mid-container {
   display: flex;
   flex-direction: column;
   height: 80vh; /* or any fixed height you want */
