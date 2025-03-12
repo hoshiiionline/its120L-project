@@ -37,7 +37,7 @@ CREATE TABLE Customer (
 
 CREATE TABLE Booking (
     bookingID INT AUTO_INCREMENT PRIMARY KEY,
-    referenceNo INT(12) UNIQUE NOT NULL,
+    referenceNo VARCHAR(20) NOT NULL,
     pricingID INT,
     customerID INT,
     dateReservedStart DATE NOT NULL,

@@ -8,6 +8,34 @@ $startDate = $_SESSION['startDate'];
 $endDate = $_SESSION['endDate'];
 $pax = $_SESSION['pax'];
 
+// reference No generation
+date_default_timezone_set('UTC');
+$today = date('Y_m_d');
+$fileName = '../config/counter_' . $today . '.txt';
+$file = fopen($fileName, 'c+');
+if (!$file) {
+    die("Unable to open counter file.");
+}
+if (!flock($file, LOCK_EX)) {
+    die("Unable to lock counter file.");
+}
+$counter = 0;
+$fileSize = filesize($fileName);
+if ($fileSize > 0) {
+    $data = fread($file, $fileSize);
+    $counter = (int)trim($data);
+}
+$counter++;
+rewind($file);
+ftruncate($file, 0);
+fwrite($file, $counter);
+fflush($file);
+flock($file, LOCK_UN);
+fclose($file);
+$formattedCounter = sprintf("%04d", $counter);
+$referenceNumber = $today . '.' . $formattedCounter;
+
+// date interval
 $start = new DateTime($startDate);
 $end = new DateTime($endDate);
 $interval = new DateInterval('P1D');
@@ -38,10 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $email           = $_POST['email'] ?? '';
   $phone           = $_POST['phone'] ?? '';
   $specialRequests = $_POST['specialRequests'] ?? '';
+  $dietaryPreference = $_POST['dietaryPreference'] ?? '';
 
-  if (!empty($firstName) && !empty($lastName) && !empty($email) && !empty($phone)) {
-    $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $firstName, $lastName, $email, $phone);
+  if (!empty($firstName) && !empty($lastName) && !empty($email) && !empty($phone) && !empty($dietaryPreference) && !empty($specialRequests)) {
+    $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, allergyList, mealPreference) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $firstName, $lastName, $email, $phone, $specialRequests, $dietaryPreference);
     if ($stmt->execute()) {
       echo "<div class='alert alert-success'>Yess successfully submitted!</div>";
     } else {
@@ -57,13 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $stmt->execute();
   $result = $stmt->get_result();
   $customerID = $result->fetch_assoc()['customerID'];
-  echo "<div class='alert alert-success'>Here is my $customerID</div>";
+  //echo "<div class='alert alert-success'>Here is my $customerID</div>";
   $stmt->close();
 
   foreach ($cart as $item) {
     $pricingID = $item['pricingID'];
-    $stmt = $conn->prepare("INSERT INTO booking (customerID, pricingID, dateReservedStart, dateReservedEnd, additionalRequests) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("iisss", $customerID, $pricingID, $startDate, $endDate, $specialRequests);
+    $stmt = $conn->prepare("INSERT INTO booking (referenceNo, customerID, pricingID, dateReservedStart, dateReservedEnd, additionalRequests) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("siisss", $referenceNumber, $customerID, $pricingID, $startDate, $endDate, $specialRequests);
     $stmt->execute();
     $stmt->close();
   }
@@ -72,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <link rel="stylesheet" href="../css/crm.css">
-
 <body class="background1">
 <div class="wrap">
   <div class="row1">
@@ -99,18 +127,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <input type="tel" id="phone" name="phone" placeholder="1234567890" required>
         </div>
         <div class="form3">
-          <label for="inlineRadioOptions" style="text-align: left;">Dietary Preference</label>
+          <label for="dietaryPreference" style="text-align: left;">Dietary Preference</label>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="regular">
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference1" value="regular">
             <label class="form-check-label" for="inlineRadio1">Regular</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="vegetarian">
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference2" value="vegetarian">
             <label class="form-check-label" for="inlineRadio2">Vegetarian</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="others">
-            <label class="form-check-label" for="inlineRadio3">Others</label>
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference3" value="others">
+            <label class="form-check-label" for="dietaryPreference">Others</label>
           </div>
         </div>
         <div class="form2">
@@ -275,9 +303,7 @@ document.getElementById("nextBtn").addEventListener("click", function() {
   }
 });
 
-// Initial display of the first record and update totals
 updateTable();
 updateRoomTotals();
 </script>
-</body>
-</html>
+<?php include "../includes/footer.php"; ?>
