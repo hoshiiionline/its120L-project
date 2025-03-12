@@ -14,6 +14,7 @@ $stmt = $conn->prepare("
     INNER JOIN pricing ON booking.pricingID = pricing.pricingID
     INNER JOIN occupancy ON pricing.occupancyID = occupancy.occupancyID
     INNER JOIN room on room.roomID = pricing.roomID
+    INNER JOIN customer on booking.customerID = customer.customerID
     WHERE status = 'PENDING';
 ");
 

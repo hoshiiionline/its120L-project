@@ -16,8 +16,9 @@ include "../includes/header.php";
           <thead>
             <tr>
               <th>Room</th>
-              <th>Occupancy Type</th>
+              <th>Occ. Type</th>
               <th>Dates</th>
+              <th>Client</th>
               <th>Price</th>
               <th>Action</th>
             </tr>
@@ -35,7 +36,6 @@ include "../includes/header.php";
           <thead>
             <tr>
               <th>Room</th>
-              <th>Occupancy Type</th>
               <th>Dates</th>
               <th>Price</th>
               <th>Action</th>

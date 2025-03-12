@@ -7,14 +7,14 @@ function reloadBookings() {
         console.log("Pending Bookings:", pendingBookings);
         console.log("Approved Bookings:", approvedBookings);
 
-        updateTable("#pending-booking tbody", pendingBookings);
+        updateTable("#pending-booking tbody", pendingBookings, true);
 
         updateTable("#approved-booking tbody", approvedBookings);
     })
     .catch((error) => console.error("Error fetching bookings:", error));
 }
 
-function updateTable(tableSelector, bookings) {
+function updateTable(tableSelector, bookings, isPending = false) {
     const tableBody = document.querySelector(tableSelector);
     if (!tableBody) {
         console.error(`Table with selector '${tableSelector}' not found.`);
@@ -27,8 +27,13 @@ function updateTable(tableSelector, bookings) {
         let row = document.createElement("tr");
         row.innerHTML = `
             <td>${room.roomType}</td>
-            <td>${room.occupancyType}</td>
+            ${isPending ? `<td>${room.occupancyType}</td>` : ""}
             <td>${room.dateReservedStart} - ${room.dateReservedEnd}</td>
+            ${isPending ? `
+                <td title="Email: ${room.emailAddress} | Contact: ${room.mobileNo}">
+                    ${room.firstName} ${room.lastName}
+                </td>
+            ` : ""}
             <td>${room.pricingRateRoom}</td>
             <td>
                 <select class="status-select" data-id="${room.bookingID}">
