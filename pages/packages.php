@@ -34,11 +34,6 @@ if(isset($_GET['signal'])){
                 <div class="label">Room Only</div>
             </div>
         </a>
-        <a href="../pages/packages.php?signal=tour">
-            <div class="option-container" style="background-image: url(../assets/tours.png);">
-                <div class="label">Tour Packages</div>
-            </div>
-        </a>
     </div>
     <div style="text-align:left"><a class="back" href="../pages/returningCustomer.php">< Back</a></div>
 </div>

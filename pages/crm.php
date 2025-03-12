@@ -146,6 +146,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any additional details... (i.e. Allergies, etc.)"></textarea>
         </div>
         <div class="form2">
+          <input type="checkbox" id="dataPrivacy" name="dataPrivacy" required>
+          <label for="dataPrivacy">
+             I hereby acknowledge that I have read and understood the full details of the 
+            <a href="dataPrivacyNotice.php" target="_blank">data privacy policy</a>.
+          </label>
+        </div>
+        <div class="form2">
           <button id="query-btn" class="submit">Submit</button>
         </div>
         <div style="text-align:left">
