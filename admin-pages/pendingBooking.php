@@ -79,6 +79,7 @@ include "../includes/header.php";
           <tbody>
           </tbody>  
         </table>
+        <h4>Pricing Information</h4>
       </div>
     </div>
 
