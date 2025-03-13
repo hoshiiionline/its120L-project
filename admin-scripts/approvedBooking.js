@@ -1,20 +1,14 @@
 function reloadBookings() {
-    Promise.all([
-        fetch("../admin-api/pendingBooking.php").then((res) => res.json()),
-        fetch("../admin-api/approvedBooking.php").then((res) => res.json())
-    ])
-    .then(([pendingBookings, approvedBookings]) => {
-        console.log("Pending Bookings:", pendingBookings);
-        console.log("Approved Bookings:", approvedBookings);
-
-        updateTable("#pending-booking tbody", pendingBookings, true);
-
-        updateTable("#approved-booking tbody", approvedBookings);
-    })
-    .catch((error) => console.error("Error fetching bookings:", error));
+    fetch("../admin-api/approvedBooking.php")
+        .then((res) => res.json())
+        .then((approvedBookings) => {
+            console.log("Approved Bookings:", approvedBookings);
+            updateTable("#approved-booking tbody", approvedBookings);
+        })
+        .catch((error) => console.error("Error fetching bookings:", error));
 }
 
-function updateTable(tableSelector, bookings, isPending = false) {
+function updateTable(tableSelector, bookings) {
     const tableBody = document.querySelector(tableSelector);
     if (!tableBody) {
         console.error(`Table with selector '${tableSelector}' not found.`);
@@ -27,13 +21,11 @@ function updateTable(tableSelector, bookings, isPending = false) {
         let row = document.createElement("tr");
         row.innerHTML = `
             <td>${room.roomType}</td>
-            ${isPending ? `<td>${room.occupancyType}</td>` : ""}
+            <td>${room.occupancyType}</td>
             <td>${room.dateReservedStart} - ${room.dateReservedEnd}</td>
-            ${isPending ? `
-                <td title="Email: ${room.emailAddress} | Contact: ${room.mobileNo}">
-                    ${room.firstName} ${room.lastName}
-                </td>
-            ` : ""}
+            <td title="Email: ${room.emailAddress} | Contact: ${room.mobileNo}">
+                ${room.firstName} ${room.lastName}
+            </td>
             <td>${room.pricingRateRoom}</td>
             <td>
                 <select class="status-select" data-id="${room.bookingID}">
@@ -58,7 +50,6 @@ function updateTable(tableSelector, bookings, isPending = false) {
     });
 }
 
-
 function updateBookingStatus(bookingID, newStatus) {
     fetch("../admin-api/updateBooking.php", {
         method: "POST",
@@ -77,5 +68,15 @@ function updateBookingStatus(bookingID, newStatus) {
     })
     .catch((error) => console.error("Error updating booking status:", error));
 }
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: "../admin-api/genCalendar.php",
+    });
+    calendar.render();
+  });
 
 reloadBookings();
