@@ -194,6 +194,21 @@ function resetInfo(){
             <td>Please Select a Record</td>
         </tr>
     `;
+
+    document.getElementById("room-type").innerText = "Room Type";
+    document.getElementById("weekday-count").innerText = "";
+    document.getElementById("weekday-rate").innerText = "";
+    document.getElementById("weekday-subtotal").innerText = "";
+    
+    document.getElementById("weekend-count").innerText = "";
+    document.getElementById("weekend-rate").innerText = "";
+    document.getElementById("weekend-subtotal").innerText = "";
+    
+    document.getElementById("holiday-count").innerText = "";
+    document.getElementById("holiday-rate").innerText = "";
+    document.getElementById("holiday-subtotal").innerText = "";
+    
+    document.getElementById("total-price").innerText = "";
 }
 
 function updateBookingStatus(bookingID, newStatus) {
