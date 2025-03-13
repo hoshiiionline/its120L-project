@@ -1,0 +1,102 @@
+PROJECT - CRM for BCNR
+
+============================================================
+STAY PACKAGE (VAT INCLUSIVE RATES)
+============================================================
+VAT Inclusive Rates Breakdown: 42% | 12% | 30%
+
+Inclusions:
+- Overnight room accommodation
+- 3 meals during the stay
+
+MAX OCCUPANCY AT COST PUBLISHED RATE [1]
+
+------------------------------------------------------------
+ROOM DETAILS (STAY PACKAGE):
+------------------------------------------------------------
+AREA                | CLASSIFICATION             | ROOM                      | MAX OCCUPANCY | COST    | PUBLISHED RATE
+-------------------------------------------------------------------------------------------------------------
+NATURE VILLA        | Group Room                 | LEDGE BED (RIGHT WING)    | 1             | 4,170.00| 5,921.40
+NATURE VILLA        | Group Room                 | LEDGE BED (RIGHT WING)    | GROUP 4       | 2,170.00| 3,081.40
+NATURE VILLA        | Group Room                 | LEDGE BED (LEFT WING)     | 1             | 4,170.00| 5,921.40
+NATURE VILLA        | Group Room                 | LEDGE BED (LEFT WING)     | GROUP 6       | 2,170.00| 3,081.40
+NATURE VILLA        | Group Room                 | CAVE DORM                 | 5 sharing     | 2,530.00| 3,592.60
+NATURE VILLA        | Group Room                 | CAVE DORM                 | 5 persons up 10| 2,170.00| 3,081.40
+NATURE VILLA        | Premium Room               | BAT CAVE 1 Solo           | 1             | 5,370.00| 7,625.40
+NATURE VILLA        | Premium Room               | BAT CAVE 1 Twin           | 2             | 6,740.00| 9,570.80
+NATURE VILLA        | Premium Room               | BAT CAVE 1 Triple         | 3             | 8,130.00| 11,544.60
+NATURE VILLA        | Premium Room               | BAT CAVE 2 Solo           | 1             | 5,370.00| 7,625.40
+NATURE VILLA        | Premium Room               | BAT CAVE 2 Twin           | 2             | 6,740.00| 9,570.80
+ART HOUSE           | Premium Room               | GROUND FLOOR Solo         | 1             | 5,370.00| 7,625.40
+ART HOUSE           | Premium Room               | GROUND FLOOR Twin         | 2             | 6,740.00| 9,570.80
+ART HOUSE           | Premium Room               | GROUND FLOOR Triple       | 3             | 8,130.00| 11,544.60
+NATURE VILLA        | Standard Room              | SINGLE STANDARD ROOM      | 1             | 4,170.00| 5,921.40
+NATURE VILLA        | Standard Room              | TWIN ROOM 1 Solo          | 1             | 4,170.00| 5,921.40
+NATURE VILLA        | Standard Room              | TWIN ROOM 1 Twin          | 2             | 5,540.00| 7,866.80
+NATURE VILLA        | Standard Room              | TWIN ROOM 2               | 1             | 4,170.00| 5,921.40
+NATURE VILLA        | Standard Room              | TWIN ROOM 2 Twin          | 2             | 5,540.00| 7,866.80
+NATURE VILLA        | Whole House                | WHOLE HOUSE               | 21            | 50,000.00| 71,000.00
+
+[1] RATE on all published materials (decks, website, flyers)
+
+
+============================================================
+ROOM ONLY (VAT INCLUSIVE RATES)
+============================================================
+VAT Inclusive Rates Breakdown: 42% | 12% | 30%
+
+MAX OCCUPANCY AT COST PUBLISHED RATE [1]
+
+------------------------------------------------------------
+ROOM DETAILS (ROOM ONLY):
+------------------------------------------------------------
+AREA                | CLASSIFICATION             | ROOM                      | MAX OCCUPANCY/Type      | COST     | PUBLISHED RATE
+-------------------------------------------------------------------------------------------------------------
+NATURE VILLA        | Premium Room               | BAT CAVE 1 Solo           | 1                       | 3,650.00 | 5,183.00
+NATURE VILLA        | Premium Room               | BAT CAVE 1 Twin           | 2                       | 3,300.00 | 4,686.00
+NATURE VILLA        | Premium Room               | BAT CAVE 1 Triple         | 3                       | 2,970.00 | 4,217.40
+NATURE VILLA        | Premium Room               | BAT CAVE 2 Solo           | 1                       | 3,650.00 | 5,183.00
+NATURE VILLA        | Premium Room               | BAT CAVE 2 Twin           | 2                       | 3,300.00 | 4,686.00
+NATURE VILLA        | Group Room                 | LEDGE BED (RIGHT WING)    | 1                       | 2,450.00 | 3,479.00
+NATURE VILLA        | Group Room                 | LEDGE BED (RIGHT WING)    | GROUP 4                 | 450.00   | 639.00
+NATURE VILLA        | Group Room                 | LEDGE BED (LEFT WING)     | 1                       | 2,450.00 | 3,479.00
+NATURE VILLA        | Group Room                 | LEDGE BED (LEFT WING)     | GROUP 6                 | 450.00   | 639.00
+NATURE VILLA        | Standard Room              | SINGLE STANDARD ROOM      | 1                       | 2,450.00 | 3,479.00
+NATURE VILLA        | Standard Room              | TWIN ROOM 1 Solo          | 1                       | 2,450.00 | 3,479.00
+NATURE VILLA        | Standard Room              | TWIN ROOM 1 Twin          | 2                       | 2,100.00 | 2,982.00
+NATURE VILLA        | Standard Room              | TWIN ROOM 2               | 2                       | 2,450.00 | 3,479.00
+NATURE VILLA        | Standard Room              | TWIN ROOM 2 Twin          | 2                       | 2,100.00 | 2,982.00
+NATURE VILLA        | Group Room                 | CAVE DORM                 | 5 sharing               | 810.00   | 1,150.20
+NATURE VILLA        | Group Room                 | CAVE DORM                 | 5 persons up 10         | 450.00   | 639.00
+NATURE VILLA        | Whole House                | WHOLE HOUSE               | 24 to 30                | 57,000.00| 80,940.00
+ART HOUSE           | Premium Room               | GROUND FLOOR Solo         | 1                       | 3,650.00 | 5,183.00
+ART HOUSE           | Premium Room               | GROUND FLOOR Twin         | 2                       | 3,300.00 | 4,686.00
+ART HOUSE           | Premium Room               | GROUND FLOOR Triple       | 3                       | 2,970.00 | 4,217.40
+ART HOUSE           | Premium Room               | 2ND FLOOR Solo            | 1                       | 4,015.00 | 5,701.30
+ART HOUSE           | Premium Room               | 2ND FLOOR Twin            | 2                       | 3,630.00 | 5,154.60
+ART HOUSE           | Premium Room               | 2ND FLOOR Triple          | 3                       | 3,267.00 | 4,639.14
+
+------------------------------------------------------------
+ADDITIONAL (WALK-IN) RATES:
+------------------------------------------------------------
+ROOM ONLY – WALK-IN Rates (VAT Inclusive):
+
+- ART HOUSE Whole House:
+    WHOLE HOUSE (12 to 15 max) : 15,500.00 | 22,010.00
+
+- WALK-IN Standard Room:
+    SINGLE BED OCCUPANCY (Standard Rooms - SOLO): 800.00 | 1,136.00
+    Standard Rooms - 2 Persons: 1,400.00 | 1,988.00
+
+- WALK-IN Standard Room (Group Rooms - 3 Persons up [Ledge Rooms / Cave Dorms]):
+    Rate per person: 450.00 | 639.00
+
+- WALK-IN Premium Room:
+    Premium Room - Solo: 1,000.00 | 1,420.00
+    Premium Room - Twin: 1,800.00 | 2,556.00
+    Premium Room - Triple: 2,100.00 | 2,982.00
+
+- WALK-IN Standard Room:
+    DOUBLE BED OCCUPANCY: 1,200.00 | 1,704.00
+
+[1] RATE on all published materials (decks, website, flyers)

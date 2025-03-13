@@ -1,0 +1,183 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+  --primary-color: #6884ac; /* Updated header color */
+  --dark-bg: #2b2b2b; /* Dark background */
+  --bubble-bg: #ffffff; /* White bubble */
+  --input-bg: #1f1f1f; /* Darker input background */
+  --text-color: #000000; /* Default black text */
+  --light-text: #ffffff; /* White text for dark backgrounds */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Container for the toggle button and chat window */
+.chat-bubble {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Floating chat toggle button */
+.chat-toggle {
+  width: 60px;
+  height: 60px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.chat-toggle:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+.chat-toggle i {
+  color: #fff;
+  font-size: 24px;
+}
+
+/* Chat window container */
+.chat-container {
+  width: 400px;
+  bottom: 90px;
+  right: 20px;
+  max-height: 500px;
+  display: none; /* Hidden until toggled open */
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden; /* Hide any overflowing content outside corners */
+  margin-bottom: 10px;
+  animation: fadeInUp 0.3s ease-out;
+  background: var(--dark-bg);
+}
+
+/* Chat header */
+.chat-header {
+  background: var(--primary-color);
+  /* Increased padding for more space around text */
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0; /* Ensure the header doesn't shrink */
+}
+.chat-header h3 {
+  color: var(--light-text);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.chat-close {
+  color: var(--light-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.chat-close:hover {
+  transform: rotate(90deg);
+}
+
+/* Main chat body area */
+.chat-body {
+  /* Slightly more padding for breathing room */
+  padding: 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 300px; /* Allows scrolling if content gets too tall */
+  overflow-y: auto;
+}
+
+/* Single message bubble */
+.message-bubble {
+  background: var(--bubble-bg);
+  color: var(--text-color);
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  max-width: 70%;
+}
+/* Typing indicator (optional) */
+.typing {
+  display: none;
+  color: var(--primary-color);
+  font-style: italic;
+}
+
+/* Input area at bottom */
+.input-group {
+  display: flex;
+  background: var(--input-bg);
+  /* Increased padding to match the top spacing */
+  padding: 1rem 1.25rem;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0; /* Prevent the input area from shrinking */
+  flex-wrap: nowrap;
+}
+.input-group input[type="text"] {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  background: #3b3b3b;
+  color: var(--light-text);
+  font-size: 0.9rem;
+}
+.input-group input[type="text"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(104, 132, 172, 0.5);
+}
+.input-group button {
+  background: var(--primary-color);
+  border: none;
+  padding: 0.6rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.input-group button:hover {
+  transform: translateY(-2px);
+}
+.input-group button i {
+  color: #fff;
+  font-size: 1rem;
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .chat-container {
+    width: calc(100% - 40px);
+  }
+}
