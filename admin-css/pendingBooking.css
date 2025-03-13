@@ -1,0 +1,126 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+  display: flex; /* Enable flexbox on the body */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-align: center;
+}
+.background1 {
+  background-image: url("../assets/view1blur.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+h2 {
+  color: #425d8a;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 2em;
+}
+
+th {
+  color: #6884ac;
+}
+
+.wrap {
+  width: 90%;
+  padding-top: 8vh;
+  padding-bottom: 8vh;
+}
+
+.row1 {
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+  justify-content: center;
+}
+
+.container {
+  background: white;
+  padding: 2em;
+  border-radius: 2em;
+  height: 80vh; /* Fixed height, 80% of viewport height */
+  overflow-y: auto; /* Enables vertical scrolling */
+}
+
+.add {
+  border-style: none;
+  color: white;
+  font-size: 1em;
+  background-color: #6884ac;
+  border-radius: 5px;
+}
+
+.add:hover {
+  background-color: #425d8a;
+}
+
+.proceed {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.8em;
+  font-size: 1em;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  background-color: #6884ac;
+  transition: background 0.3s ease;
+  margin-bottom: 1em;
+}
+
+.proceed:hover {
+  background-color: #425d8a;
+}
+
+a {
+  text-decoration: none;
+}
+
+.back {
+  padding-left: 0.5em;
+  text-align: left;
+  color: #6884ac;
+}
+
+.back:hover {
+  color: #425d8a;
+  font-weight: bold;
+}
+
+.left-container,
+.right-container,
+.mid-container {
+  display: flex;
+  flex-direction: column;
+  height: 80vh; /* or any fixed height you want */
+}
+
+.scrollable-content {
+  flex: 1; /* takes up remaining space */
+  overflow-y: auto; /* enables scrolling when needed */
+  margin-bottom: 1em; /* optional spacing */
+}
+
+.fixed-footer {
+  /* This section stays fixed at the bottom of the container */
+}
+
+#priceBreakdown {
+  width: 100%;
+  border-collapse: collapse;
+}
+#priceBreakdown th,
+#priceBreakdown td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+#priceBreakdown thead {
+  background: #f5f5f5;
+}
+#priceBreakdown tfoot td {
+  font-weight: bold;
+}

@@ -222,8 +222,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </table>
       </div>
       
+      <div id="perPaxContainer" style="margin-top: 10px;">
+        <h3>Est. Price per Pax: <span id="perPax"></span></h3>
+      </div>
+
       <div id="grandTotalContainer" style="margin-top: 10px;">
-        <h3>Total: <span id="grandTotal"></span></h3>
+        <h3>Est. Grand Total: <span id="grandTotal"></span></h3>
       </div>
     </div>
   </div>
@@ -234,6 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <script>
 const cartData = <?php echo json_encode($cart); ?>;
+const pax = <?php echo json_encode($_SESSION['pax'] ?? 1); ?>;
 const weekdayCount = <?php echo json_encode($_SESSION['weekday'] ?? 2); ?>;
 const weekendCount = <?php echo json_encode($_SESSION['weekend'] ?? 1); ?>;
 const holidayCount = 1; 
@@ -262,22 +267,22 @@ function updateTable() {
   
   document.getElementById("room-type").innerText = record.roomType;
   document.getElementById("weekday-count").innerText = weekdayCount;
-  document.getElementById("weekday-rate").innerText = "$" + weekdayRate.toFixed(2);
-  document.getElementById("weekday-subtotal").innerText = "$" + weekdaySubtotal.toFixed(2);
+  document.getElementById("weekday-rate").innerText = "₱" + weekdayRate.toFixed(2);
+  document.getElementById("weekday-subtotal").innerText = "₱" + weekdaySubtotal.toFixed(2);
   
   document.getElementById("weekend-count").innerText = weekendCount;
-  document.getElementById("weekend-rate").innerText = "$" + weekendRate.toFixed(2);
-  document.getElementById("weekend-subtotal").innerText = "$" + weekendSubtotal.toFixed(2);
+  document.getElementById("weekend-rate").innerText = "₱" + weekendRate.toFixed(2);
+  document.getElementById("weekend-subtotal").innerText = "₱" + weekendSubtotal.toFixed(2);
   
   document.getElementById("holiday-count").innerText = holidayCount;
-  document.getElementById("holiday-rate").innerText = "$" + (record.pricingRateRoom * 1.02).toFixed(2);
-  document.getElementById("holiday-subtotal").innerText = "$" + holidaySubtotal.toFixed(2);
+  document.getElementById("holiday-rate").innerText = "₱" + (record.pricingRateRoom * 1.02).toFixed(2);
+  document.getElementById("holiday-subtotal").innerText = "₱" + holidaySubtotal.toFixed(2);
   
-  document.getElementById("total-price").innerText = "$" + total.toFixed(2);
+  document.getElementById("total-price").innerText = "₱" + total.toFixed(2);
 }
 
 function updateRoomTotals() {
-  let grandTotal = 0;
+  let perPax = 0;
   const tbody = document.getElementById('roomTotalsBody');
   tbody.innerHTML = ''; 
   
@@ -287,13 +292,14 @@ function updateRoomTotals() {
     const weSubtotal = record.pricingRateRoom * 1.015 * weekendCount;
     const hSubtotal = record.pricingRateRoom * 1.02 * holidayCount;
     const roomTotal = wSubtotal + weSubtotal + hSubtotal;
-    grandTotal += roomTotal;
+    perPax += roomTotal;
     
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${record.roomType}</td><td>$${roomTotal.toFixed(2)}</td>`;
+    tr.innerHTML = `<td>${record.roomType}</td><td>₱${roomTotal.toFixed(2)}</td>`;
     tbody.appendChild(tr);
   });
-  document.getElementById('grandTotal').innerText = "$" + grandTotal.toFixed(2);
+  document.getElementById('perPax').innerText = "₱" + perPax.toFixed(2);
+  document.getElementById('grandTotal').innerText = "₱" + perPax.toFixed(2)*pax;
 }
 
 document.getElementById("prevBtn").addEventListener("click", function() {

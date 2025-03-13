@@ -43,11 +43,11 @@ function updateTable(tableSelector, bookings) {
 }
 
 function fetchBookingDetails(bookingID) {
-    fetch(`../admin-api/pendingBooking.php?bookingID=${bookingID}`)
+    fetch(`../admin-api/getBooking.php?bookingID=${bookingID}`)
         .then((response) => response.json())
         .then((data) => {
             console.log("Booking Details:", data);
-            displayBookingDetails(data[0]);
+            displayBookingDetails(data);
         })
         .catch((error) => console.error("Error fetching booking details:", error));
 }
@@ -65,6 +65,13 @@ function reloadBookings() {
 function displayBookingDetails(data) {
     const detailsContainer = document.querySelector("#room-info tbody");
     const customerContainer = document.querySelector("#customer-info tbody");
+
+    const weekdayRate    = data.pricingRateRoom * 1;
+    const weekendRate    = data.pricingRateRoom * 1.015;
+    const weekdaySubtotal = weekdayRate * data.weekdayCount;
+    const weekendSubtotal = weekendRate * data.weekendCount;
+    const holidaySubtotal = data.pricingRateRoom * 1.02 * 0;
+    const total = weekdaySubtotal + weekendSubtotal + holidaySubtotal;
 
     if (!detailsContainer || !customerContainer) return;
 
@@ -117,8 +124,22 @@ function displayBookingDetails(data) {
             <td>${data.mobileNo}</td>
         </tr>
     `;
+    
+    document.getElementById("room-type").innerText = data.roomType;
+    document.getElementById("weekday-count").innerText = data.weekdayCount;
+    document.getElementById("weekday-rate").innerText = "₱" + weekdayRate.toFixed(2);
+    document.getElementById("weekday-subtotal").innerText = "₱" + weekdaySubtotal.toFixed(2);
+    
+    document.getElementById("weekend-count").innerText = data.weekendCount;
+    document.getElementById("weekend-rate").innerText = "₱" + weekendRate.toFixed(2);
+    document.getElementById("weekend-subtotal").innerText = "₱" + weekendSubtotal.toFixed(2);
+    
+    document.getElementById("holiday-count").innerText = 0;
+    document.getElementById("holiday-rate").innerText = "₱" + (data.pricingRateRoom * 1.02).toFixed(2);
+    document.getElementById("holiday-subtotal").innerText = "₱" + holidaySubtotal.toFixed(2);
+    
+    document.getElementById("total-price").innerText = "₱" + total.toFixed(2);
 
-    // Add event listener to handle status change
     document.querySelector("#status-select").addEventListener("change", function () {
         let bookingID = this.getAttribute("data-id");
         let newStatus = this.value;

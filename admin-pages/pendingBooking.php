@@ -4,7 +4,7 @@ $title = "Admin Dashboard";
 include "../includes/header.php";
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-<link rel="stylesheet" href="../css/availableRooms.css">
+<link rel="stylesheet" href="../admin-css/pendingBooking.css">
 
 <body class="background1">
 <div class="wrap">
@@ -79,6 +79,46 @@ include "../includes/header.php";
           <tbody>
           </tbody>  
         </table>
+        <h4>Pricing Information</h4>
+        <table id="priceBreakdown">
+        <thead>
+          <tr>
+            <th colspan="4" id="room-type" style="text-align: center;"></th>
+          </tr>
+          <tr>
+            <th>Category</th>
+            <th>Days</th>
+            <th>Rate</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Weekday</td>
+            <td id="weekday-count"></td>
+            <td id="weekday-rate"></td>
+            <td id="weekday-subtotal"></td>
+          </tr>
+          <tr>
+            <td>Weekend</td>
+            <td id="weekend-count"></td>
+            <td id="weekend-rate"></td>
+            <td id="weekend-subtotal"></td>
+          </tr>
+          <tr>
+            <td>Holiday</td>
+            <td id="holiday-count"></td>
+            <td id="holiday-rate"></td>
+            <td id="holiday-subtotal"></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" style="text-align: right;">Est. TOTAL:</td>
+            <td id="total-price"></td>
+          </tr>
+        </tfoot>
+      </table>
       </div>
     </div>
 
