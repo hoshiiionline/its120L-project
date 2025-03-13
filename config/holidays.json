@@ -1,0 +1,212 @@
+[
+  {
+    "date": "2025-01-01",
+    "name": "New Year's Day",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-01-23",
+    "name": "First Philippine Republic Day",
+    "type": "Special Working Day",
+    "details": ""
+  },
+  {
+    "date": "2025-01-27",
+    "name": "Lailatul Isra Wal Mi Raj",
+    "type": "Common Local Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-01-29",
+    "name": "Lunar New Year's Day",
+    "type": "Special Non-working Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-02-25",
+    "name": "People Power Anniversary",
+    "type": "Observance",
+    "details": ""
+  },
+  {
+    "date": "2025-03-02",
+    "name": "Ramadan Start",
+    "type": "Observance",
+    "details": ""
+  },
+  {
+    "date": "2025-03-20",
+    "name": "March Equinox",
+    "type": "Season",
+    "details": ""
+  },
+  {
+    "date": "2025-03-31",
+    "name": "Eidul-Fitar (Tentative Date)",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-04-09",
+    "name": "The Day of Valor",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-04-17",
+    "name": "Maundy Thursday",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-04-18",
+    "name": "Good Friday",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-04-19",
+    "name": "Black Saturday",
+    "type": "Special Non-working Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-04-20",
+    "name": "Easter Sunday",
+    "type": "Observance",
+    "details": ""
+  },
+  {
+    "date": "2025-05-01",
+    "name": "Labor Day",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-06-07",
+    "name": "Eid al-Adha (Feast of the Sacrifice) (Tentative Date)",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-06-08",
+    "name": "Eid al-Adha Day 2 (Tentative Date)",
+    "type": "Common Local Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-06-12",
+    "name": "Independence Day",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-06-21",
+    "name": "June Solstice",
+    "type": "Season",
+    "details": ""
+  },
+  {
+    "date": "2025-06-27",
+    "name": "Amun Jadid (Tentative Date)",
+    "type": "Muslim, Common Local Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-08-21",
+    "name": "Ninoy Aquino Day",
+    "type": "Special Non-working Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-08-25",
+    "name": "National Heroes Day",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-09-03",
+    "name": "Yamashita Surrender Day",
+    "type": "Special Working Day",
+    "details": ""
+  },
+  {
+    "date": "2025-09-05",
+    "name": "Maulid un-Nabi (Tentative Date)",
+    "type": "Common Local Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-09-08",
+    "name": "Feast of the Nativity of Mary",
+    "type": "Special Working Day",
+    "details": ""
+  },
+  {
+    "date": "2025-09-23",
+    "name": "September Equinox",
+    "type": "Season",
+    "details": ""
+  },
+  {
+    "date": "2025-10-31",
+    "name": "Special non-working Day",
+    "type": "Special Non-working Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-11-01",
+    "name": "All Saints' Day",
+    "type": "Special Non-working Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-11-02",
+    "name": "All Souls' Day",
+    "type": "Observance",
+    "details": ""
+  },
+  {
+    "date": "2025-11-30",
+    "name": "Bonifacio Day",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-12-08",
+    "name": "Feast of the Immaculate Conception",
+    "type": "Special Non-working Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-12-21",
+    "name": "December Solstice",
+    "type": "Season",
+    "details": ""
+  },
+  {
+    "date": "2025-12-24",
+    "name": "Christmas Eve",
+    "type": "Special Non-working Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-12-25",
+    "name": "Christmas Day",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-12-30",
+    "name": "Rizal Day",
+    "type": "Regular Holiday",
+    "details": ""
+  },
+  {
+    "date": "2025-12-31",
+    "name": "New Year's Eve",
+    "type": "Special Non-working Holiday",
+    "details": ""
+  }
+]
