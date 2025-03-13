@@ -1,43 +1,73 @@
 <?php
 require '../config/config.php';
 $title = "Returning Customer";
+$errorMessage = "";
+
+include "../includes/header.php";
 
 if(isset($_GET['signal'])){
     $signal = $_GET['signal'];
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'];
-    $mobile = $_POST['mobile'];
+    $email = trim($_POST['email']);
+    $mobile = trim($_POST['mobile']);
+    // Uncomment these lines for debugging if needed
+    echo $email;
+    echo $mobile;
 
-    if (filter_var($email, FILTER_VALIDATE_EMAIL) && preg_match('/^[0-9]{10}$/', $mobile)) {
-        $query = "SELECT * FROM customers WHERE email = '$email' AND mobile = '$mobile'";
-        $result = mysqli_query($conn, $query);
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        // Using a prepared statement for better security and consistency
+        $stmt = $conn->prepare("SELECT * FROM customer WHERE emailAddress = ? AND mobileNo = ?");
+        $stmt->bind_param("ss", $email, $mobile);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        if (mysqli_num_rows($result) > 0) {
-            header('Location: availabilityRoom.php');
+        if ($result && $result->num_rows > 0) {
+            $_SESSION['returningEmail'] = $email;
+            header('Location: roomAvailability.php');
         } else {
-            echo "Customer not found";
+            $errorMessage = "Customer not found";
         }
+        $stmt->close();
     } else {
-        echo "Invalid email or mobile number";
+        $errorMessage = "Invalid email or mobile number";
     }
 }
-include "../includes/header.php";
 ?>
 
-    <link rel="stylesheet" href="../css/verifyReturningCustomer.css">
+<link rel="stylesheet" href="../css/verifyReturningCustomer.css">
+<style>
+    /* Red error div styling */
+    .error-message {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+        padding: 10px;
+        margin: 20px auto;
+        text-align: center;
+        width: 80%;
+        max-width: 400px;
+        border-radius: 5px;
+    }
+</style>
 </head>
 <body class="background1">
 <div class="container">
     <div><img src="../assets/logoflat.png" width="30%"></div>
     <h2>RETURNING GUEST</h2>
     <h3>Please Enter Details</h3>
-		<div class="tooltip">?
-  		<span class="tooltiptext">Tooltip text</span>
-		</div>
+    <div class="tooltip">?
+        <span class="tooltiptext">Tooltip text</span>
+    </div>
     <br>
-    <form action="verifyReturningCustomer.php" method="post">
+    
+    <!-- Display error message if it exists -->
+    <?php if ($errorMessage != ""): ?>
+        <div class="error-message"><?php echo $errorMessage; ?></div>
+    <?php endif; ?>
+    
+    <form action="verifyReturningCustomer.php" method="POST">
         <div class="form">
             <div class="form-group">
                 <label for="email">Email Address</label>
@@ -49,8 +79,6 @@ include "../includes/header.php";
             </div>
             <button type="submit">Submit</button>
         </div>
-
-    </form>
     </form>
     <div style="text-align:left"><a class="back" href="returningCustomer.php">< Back</a></div>
 </div>

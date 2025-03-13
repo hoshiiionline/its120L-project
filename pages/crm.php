@@ -2,6 +2,13 @@
 require '../config/config.php';
 $title = "CRM";
 include "../includes/header.php";
+
+// Start session if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Get cart and booking details from session
 $cart = $_SESSION['cart'] ?? [];
 
 // Retrieve booking dates and pax from session
@@ -42,7 +49,7 @@ $end = new DateTime($endDate);
 $interval = new DateInterval('P1D');
 $period = new DatePeriod($start, $interval, $end->modify('+1 day'));
 
-// Load holidays from the local JSON file (expects an array of objects with a "date" key)
+// Load holidays from the local JSON file
 $holidaysFile = '../config/holidays.json';
 $holidays = [];
 if (file_exists($holidaysFile)) {
@@ -74,12 +81,34 @@ foreach ($period as $date) {
 $_SESSION['weekday'] = $weekdayCount;
 $_SESSION['weekend'] = $weekendCount;
 
-if (isset($_GET["start-date"], $_GET["end-date"])) {
-    $startDate = $_GET["start-date"];
-    $endDate   = $_GET["end-date"];
+// Get form values for pre-population (initialize as empty)
+$firstName = "";
+$lastName = "";
+$email = "";
+$phone = "";
+$specialRequests = "";
+$dietaryPreference = "";
+
+// Check if a returning customer email exists in session and pre-populate fields accordingly
+if (isset($_SESSION['returningEmail'])) {
+    $returningEmail = $_SESSION['returningEmail'];
+    $stmt = $conn->prepare("SELECT * FROM customer WHERE emailAddress = ?");
+    $stmt->bind_param("s", $returningEmail);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && $row = $result->fetch_assoc()) {
+        $firstName         = $row['firstName'] ?? "";
+        $lastName          = $row['lastName'] ?? "";
+        $email             = $row['emailAddress'] ?? "";
+        $phone             = $row['mobileNo'] ?? "";
+        $specialRequests   = $row['allergyList'] ?? "";
+        $dietaryPreference = $row['mealPreference'] ?? "";
+    }
+    $stmt->close();
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Use POST values if submitted; these will override the pre-populated values.
     $firstName         = $_POST['firstName'] ?? '';
     $lastName          = $_POST['lastName'] ?? '';
     $email             = $_POST['email'] ?? '';
@@ -88,32 +117,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $dietaryPreference = $_POST['dietaryPreference'] ?? '';
 
     if (!empty($firstName) && !empty($lastName) && !empty($email) && !empty($phone) && !empty($dietaryPreference) && !empty($specialRequests)) {
-        $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, allergyList, mealPreference) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $firstName, $lastName, $email, $phone, $specialRequests, $dietaryPreference);
-        if ($stmt->execute()) {
-            $_SESSION['refNo'] = $referenceNumber;
-            header('Location: thankYouPage.php');
+        // Check if the customer already exists based on the email
+        $stmt = $conn->prepare("SELECT customerID FROM customer WHERE emailAddress = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $customerID = null;
+        if ($result && $result->num_rows > 0) {
+            // Customer exists: update the record
+            $row = $result->fetch_assoc();
+            $customerID = $row['customerID'];
+            $stmt->close();
+            $stmt = $conn->prepare("UPDATE customer SET firstName = ?, lastName = ?, mobileNo = ?, allergyList = ?, mealPreference = ? WHERE emailAddress = ?");
+            $stmt->bind_param("ssssss", $firstName, $lastName, $phone, $specialRequests, $dietaryPreference, $email);
+            $stmt->execute();
+            $stmt->close();
         } else {
-            echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+            // Customer does not exist: insert a new record
+            $stmt->close();
+            $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, allergyList, mealPreference) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssss", $firstName, $lastName, $email, $phone, $specialRequests, $dietaryPreference);
+            $stmt->execute();
+            // Get the inserted customer ID
+            $customerID = $conn->insert_id;
+            $stmt->close();
         }
-        $stmt->close();
+        
+        // Set the session variable for returning email for future use
+        $_SESSION['returningEmail'] = $email;
+        
+        // Store reference number and redirect to thank you page
+        $_SESSION['refNo'] = $referenceNumber;
+        header('Location: thankYouPage.php');
+        exit();
     } else {
         echo "<div class='alert alert-danger'>Please fill in all required fields.</div>";
     }
 
-    $stmt = $conn->prepare("SELECT customerID FROM customer WHERE emailAddress = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $customerID = $result->fetch_assoc()['customerID'];
-    $stmt->close();
-
-    foreach ($cart as $item) {
-        $pricingID = $item['pricingID'];
-        $stmt = $conn->prepare("INSERT INTO booking (referenceNo, customerID, pricingID, dateReservedStart, dateReservedEnd, additionalRequests) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("siisss", $referenceNumber, $customerID, $pricingID, $startDate, $endDate, $specialRequests);
-        $stmt->execute();
-        $stmt->close();
+    // Booking insert: now use $customerID if it exists
+    if ($customerID) {
+        foreach ($cart as $item) {
+            $pricingID = $item['pricingID'];
+            $stmt = $conn->prepare("INSERT INTO booking (referenceNo, customerID, pricingID, dateReservedStart, dateReservedEnd, additionalRequests) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("siisss", $referenceNumber, $customerID, $pricingID, $startDate, $endDate, $specialRequests);
+            $stmt->execute();
+            $stmt->close();
+        }
     }
 }
 ?>
@@ -124,43 +173,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- CRM Form -->
     <div class="container">
       <h2>Hotel Booking Form</h2>
-      <form method="POST">
+      <form method="POST" id = "crmForm">
         <div class="form">
           <div class="form-group">
             <label for="firstName">First Name</label>
-            <input type="text" id="firstName" name="firstName" placeholder="John" required>
+            <input type="text" id="firstName" name="firstName" placeholder="John" required value="<?php echo htmlspecialchars($firstName); ?>">
           </div>
           <div class="form-group">
             <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+            <input type="text" id="lastName" name="lastName" placeholder="Doe" required value="<?php echo htmlspecialchars($lastName); ?>">
           </div>
         </div>
         <div class="form2">
           <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" placeholder="johndoe@email.com" required>
+          <input type="email" id="email" name="email" placeholder="johndoe@email.com" required value="<?php echo htmlspecialchars($email); ?>">
         </div>
         <div class="form2">
           <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone" placeholder="1234567890" required>
+          <input type="tel" id="phone" name="phone" placeholder="1234567890" required value="<?php echo htmlspecialchars($phone); ?>">
         </div>
         <div class="form3">
           <label for="dietaryPreference" style="text-align: left;">Dietary Preference</label>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference1" value="regular">
-            <label class="form-check-label" for="inlineRadio1">Regular</label>
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference1" value="regular" <?php if($dietaryPreference == "regular") echo "checked"; ?>>
+            <label class="form-check-label" for="dietaryPreference1">Regular</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference2" value="vegetarian">
-            <label class="form-check-label" for="inlineRadio2">Vegetarian</label>
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference2" value="vegetarian" <?php if($dietaryPreference == "vegetarian") echo "checked"; ?>>
+            <label class="form-check-label" for="dietaryPreference2">Vegetarian</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference3" value="others">
-            <label class="form-check-label" for="dietaryPreference">Others</label>
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference3" value="others" <?php if($dietaryPreference == "others") echo "checked"; ?>>
+            <label class="form-check-label" for="dietaryPreference3">Others</label>
           </div>
         </div>
         <div class="form2">
           <label for="specialRequests">Special Requests</label>
-          <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any additional details... (i.e. Allergies, etc.)"></textarea>
+          <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any additional details... (i.e. Allergies, etc.)"><?php echo htmlspecialchars($specialRequests); ?></textarea>
         </div>
         <div class="form2">
           <input type="checkbox" id="dataPrivacy" name="dataPrivacy" required>
@@ -312,5 +361,19 @@ document.getElementById("nextBtn").addEventListener("click", function() {
 });
 updateTable();
 updateRoomTotals();
+</script>
+<script>
+// Confirmation before form submission
+document.getElementById("crmForm").addEventListener("submit", function(e) {
+    var confirmationMessage = "";
+    <?php if(isset($_SESSION['returningEmail'])): ?>
+        confirmationMessage = "You are an existing user. Are you sure you want to update your record with these details?";
+    <?php else: ?>
+        confirmationMessage = "Are you sure all your details are correct?";
+    <?php endif; ?>
+    if (!confirm(confirmationMessage)) {
+         e.preventDefault();
+    }
+});
 </script>
 <?php include "../includes/footer.php"; ?>
