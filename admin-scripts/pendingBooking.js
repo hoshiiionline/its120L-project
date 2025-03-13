@@ -52,6 +52,16 @@ function fetchBookingDetails(bookingID) {
         .catch((error) => console.error("Error fetching booking details:", error));
 }
 
+function reloadBookings() {
+    fetch("../admin-api/pendingBooking.php")
+        .then((res) => res.json())
+        .then((pendingBookings) => {
+            console.log("Pending Bookings:", pendingBookings);
+            updateTable("#pending-booking tbody", pendingBookings);
+        })
+        .catch((error) => console.error("Error fetching bookings:", error));
+}
+
 function displayBookingDetails(data) {
     const detailsContainer = document.querySelector("#room-info tbody");
     const customerContainer = document.querySelector("#customer-info tbody");
@@ -75,10 +85,11 @@ function displayBookingDetails(data) {
             <td>Status</td>
             <td>
                 <select id="status-select" data-id="${data.bookingID}">
-                    <option value="PENDING" ${data.status === "PENDING" ? "selected" : ""}>Pending</option>
-                    <option value="FOR APPROVAL" ${data.status === "FOR APPROVAL" ? "selected" : ""}>For Approval</option>
-                    <option value="APPROVED" ${data.status === "APPROVED" ? "selected" : ""}>Approved</option>
-                    <option value="CANCELLED" ${data.status === "CANCELLED" ? "selected" : ""}>Cancelled</option>
+                    <option value="PENDING" ${data.status === "PENDING" ? "selected" : ""}>PENDING</option>
+                    <option value="FOR APPROVAL" ${data.status === "FOR APPROVAL" ? "selected" : ""}>FOR APPROVAL</option>
+                    <option value="APPROVED" ${data.status === "APPROVED" ? "selected" : ""}>APPROVED</option>
+                    <option value="CANCELLED" ${data.status === "CANCEL" ? "selected" : ""}>CANCELLED</option>
+                    <option value="DECLINED" ${data.status === "DECLINED" ? "selected" : ""}>DECLINED</option>
                 </select>
             </td>
         </tr>
@@ -115,6 +126,55 @@ function displayBookingDetails(data) {
     });
 }
 
+function resetInfo(){
+    const detailsContainer = document.querySelector("#room-info tbody");
+    const customerContainer = document.querySelector("#customer-info tbody");
+
+    if (!detailsContainer || !customerContainer) return;
+
+    detailsContainer.innerHTML = `
+        <tr>
+            <th>Desc.</th>
+            <th>Info.</th>
+        </tr>
+        <tr>
+            <td>Room Type</td>
+            <td>Please Select a Record</td>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td>Please Select a Record</td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>Please Select a Record</td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td>Please Select a Record</td>
+        </tr>
+    `;
+
+    customerContainer.innerHTML = `
+        <tr>
+            <th>Desc.</th>
+            <th>Info.</th>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>Please Select a Record</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>Please Select a Record</td>
+        </tr>
+        <tr>
+            <td>Mobile No.</td>
+            <td>Please Select a Record</td>
+        </tr>
+    `;
+}
+
 function updateBookingStatus(bookingID, newStatus) {
     fetch("../admin-api/updateBooking.php", {
         method: "POST",
@@ -127,6 +187,7 @@ function updateBookingStatus(bookingID, newStatus) {
         if (data.success) {
             alert("Booking status updated successfully!");
             reloadBookings();
+            resetInfo();
         } else {
             alert("Failed to update status: " + data.error);
         }

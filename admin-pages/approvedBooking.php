@@ -9,13 +9,15 @@ include "../includes/header.php";
 <body class="background1">
 <div class="wrap">
   <div class="row1">
-    <div class="col-lg-1 container left-container d-flex align-items-center justify-content-center">
-      <i class="fas fa-arrow-left fa-3x"></i> 
+    <div class="col-lg-1 container right-container d-flex align-items-center justify-content-center" style="overflow: hidden;">
+      <a href="pendingBooking.php" class="btn">
+          <i class="fas fa-arrow-left fa-3x"></i>
+      </a>
     </div>
 
     <!-- Left Container: Available Rooms -->
-    <div class="col-lg-6 container mid-container">
-      <h2>Pending Bookings</h2>
+    <div class="col-lg-7 container mid-container">
+      <h2>Approved Bookings</h2>
       <div class="scrollable-content">
         <table id="approved-booking" class="table table-striped">
           <thead>
@@ -34,7 +36,7 @@ include "../includes/header.php";
       </div>
     </div>
     
-    <div class="col-lg-5 container right-container">
+    <div class="col-lg-4 container right-container">
       <h2>Calendar</h2>
       <div id='calendar'></div>
     </div>

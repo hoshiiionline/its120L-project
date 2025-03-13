@@ -1,3 +1,15 @@
+let calendar;
+
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      height: "100%",
+      initialView: 'dayGridMonth',
+      events: "../admin-api/genCalendar.php",
+    });
+    calendar.render();
+  });
+
 function reloadBookings() {
     fetch("../admin-api/approvedBooking.php")
         .then((res) => res.json())
@@ -29,9 +41,11 @@ function updateTable(tableSelector, bookings) {
             <td>${room.pricingRateRoom}</td>
             <td>
                 <select class="status-select" data-id="${room.bookingID}">
-                    <option value="PENDING" ${room.status === "PENDING" ? "selected" : ""}>Pending</option>
-                    <option value="APPROVED" ${room.status === "APPROVED" ? "selected" : ""}>Approved</option>
-                    <option value="CANCELLED" ${room.status === "CANCELLED" ? "selected" : ""}>Cancelled</option>
+                    <option value="PENDING" ${room.status === "PENDING" ? "selected" : ""}>PENDING</option>
+                    <option value="FOR APPROVAL" ${room.status === "FOR APPROVAL" ? "selected" : ""}>FOR APPROVAL</option>
+                    <option value="APPROVED" ${room.status === "APPROVED" ? "selected" : ""}>APPROVED</option>
+                    <option value="CANCELLED" ${room.status === "CANCEL" ? "selected" : ""}>CANCELLED</option>
+                    <option value="DECLINED" ${room.status === "DECLINED" ? "selected" : ""}>DECLINED</option>
                 </select>
             </td>
         `;
@@ -62,21 +76,12 @@ function updateBookingStatus(bookingID, newStatus) {
         if (data.success) {
             alert("Booking status updated successfully!");
             reloadBookings();
+            calendar.refetchEvents();
         } else {
             alert("Failed to update status: " + data.error);
         }
     })
     .catch((error) => console.error("Error updating booking status:", error));
 }
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      events: "../admin-api/genCalendar.php",
-    });
-    calendar.render();
-  });
 
 reloadBookings();

@@ -82,8 +82,10 @@ include "../includes/header.php";
       </div>
     </div>
 
-    <div class="col-lg-1 container right-container d-flex align-items-center justify-content-center">
-      <i class="fas fa-arrow-right fa-3x"></i> 
+    <div class="col-lg-1 container right-container d-flex align-items-center justify-content-center" style="overflow: hidden;">
+      <a href="approvedBooking.php" class="btn">
+          <i class="fas fa-arrow-right fa-3x"></i>
+      </a>
     </div>
 
   </div>
