@@ -145,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </div>
           <div class="form-group">
             <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" name="lastName" placeholder="Doe" value=<?php echo $customerData['lastName'];?>required>
+            <input type="text" id="lastName" name="lastName" placeholder="Doe" value=<?php echo $customerData['lastName'];?> required>
           </div>
         </div>
         <div class="form2">
