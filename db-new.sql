@@ -42,12 +42,13 @@ CREATE TABLE Booking (
     customerID INT,
     dateReservedStart DATE NOT NULL,
     dateReservedEnd DATE NOT NULL,
+    pax INT NOT NULL DEFAULT 1,
+    estPricingTotal DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     status ENUM('PENDING', 'FOR APPROVAL', 'DECLINED', 'CANCEL', 'APPROVED') NOT NULL DEFAULT 'PENDING',
     additionalRequests TEXT,
     FOREIGN KEY (pricingID) REFERENCES Pricing(pricingID) ON DELETE CASCADE,
     FOREIGN KEY (customerID) REFERENCES Customer(customerID) ON DELETE CASCADE
 );
-
 
 INSERT INTO Room (roomType, roomPackage) VALUES
 ('Batcave 1', 'Nature Villa'),

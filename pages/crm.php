@@ -3,7 +3,6 @@ $title = "CRM";
 include "../includes/header.php";
 $cart = $_SESSION['cart'] ?? [];
 
-// computes for num of weekdy and weeknd
 $startDate = $_SESSION['startDate'];
 $endDate = $_SESSION['endDate'];
 $pax = $_SESSION['pax'];
@@ -35,7 +34,6 @@ fclose($file);
 $formattedCounter = sprintf("%04d", $counter);
 $referenceNumber = $today . '.' . $formattedCounter;
 
-// date interval
 $start = new DateTime($startDate);
 $end = new DateTime($endDate);
 $interval = new DateInterval('P1D');
@@ -68,9 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $specialRequests = $_POST['specialRequests'] ?? '';
   $dietaryPreference = $_POST['dietaryPreference'] ?? '';
 
-  if (!empty($firstName) && !empty($lastName) && !empty($email) && !empty($phone) && !empty($dietaryPreference) && !empty($specialRequests)) {
-    $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, allergyList, mealPreference) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $firstName, $lastName, $email, $phone, $specialRequests, $dietaryPreference);
+  if (!empty($firstName) && !empty($lastName) && !empty($email) && !empty($phone) && !empty($dietaryPreference)) {
+    $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, mealPreference) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $firstName, $lastName, $email, $phone, $dietaryPreference);
     if ($stmt->execute()) {
       echo "<div class='alert alert-success'>Yess successfully submitted!</div>";
     } else {
@@ -91,8 +89,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   foreach ($cart as $item) {
     $pricingID = $item['pricingID'];
-    $stmt = $conn->prepare("INSERT INTO booking (referenceNo, customerID, pricingID, dateReservedStart, dateReservedEnd, additionalRequests) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("siisss", $referenceNumber, $customerID, $pricingID, $startDate, $endDate, $specialRequests);
+    $pricingRateRoom = $item['pricingRateRoom']; // Room rate
+
+    // Calculate totals
+    $weekdayRate = $pricingRateRoom * 1;
+    $weekendRate = $pricingRateRoom * 1.015;
+    $holidayRate = $pricingRateRoom * 1.02;
+
+    $weekdaySubtotal = $weekdayRate * $weekdayCount;
+    $weekendSubtotal = $weekendRate * $weekendCount;
+    $holidaySubtotal = 0;
+
+    $total = ($weekdaySubtotal + $weekendSubtotal + $holidaySubtotal) * $pax;
+
+    // Insert into database
+    $stmt = $conn->prepare("INSERT INTO booking (referenceNo, customerID, pricingID, dateReservedStart, dateReservedEnd, pax, additionalRequests, estPricingTotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("siissisd", $referenceNumber, $customerID, $pricingID, $startDate, $endDate, $pax, $specialRequests, $total);
     $stmt->execute();
     $stmt->close();
   }
@@ -299,7 +311,7 @@ function updateRoomTotals() {
     tbody.appendChild(tr);
   });
   document.getElementById('perPax').innerText = "₱" + perPax.toFixed(2);
-  document.getElementById('grandTotal').innerText = "₱" + perPax.toFixed(2)*pax;
+  document.getElementById('grandTotal').innerText = "₱" + (perPax.toFixed(2)*pax).toFixed(2);
 }
 
 document.getElementById("prevBtn").addEventListener("click", function() {
