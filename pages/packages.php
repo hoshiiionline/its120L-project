@@ -1,4 +1,5 @@
 <?php
+session_start();
 $title = "Package Selection";
 if(isset($_GET['signal'])){
    	$signal = $_GET['signal'];
