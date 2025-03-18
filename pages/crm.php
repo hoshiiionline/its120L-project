@@ -37,7 +37,7 @@ $referenceNumber = $today . '.' . $formattedCounter;
 $start = new DateTime($startDate);
 $end = new DateTime($endDate);
 $interval = new DateInterval('P1D');
-$period = new DatePeriod($start, $interval, $end->modify('+1 day'));
+$period = new DatePeriod($start->modify('+1 day'), $interval, $end->modify('+1 day'));
 
 $weekdayCount = 0;
 $weekendCount = 0;
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($stmt->num_rows > 0) {
         $stmt->bind_result($customerID);
         $stmt->fetch();
-        echo "<script>alert('User is existing! Using existing credentials." . $customerID . "');</script>";
+        echo "<script>alert('User is existing! Using existing credentials.');</script>";
     } else {
         $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, mealPreference) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("sssss", $firstName, $lastName, $email, $phone, $dietaryPreference);
@@ -266,7 +266,7 @@ const cartData = <?php echo json_encode($cart); ?>;
 const pax = <?php echo json_encode($_SESSION['pax'] ?? 1); ?>;
 const weekdayCount = <?php echo json_encode($_SESSION['weekday'] ?? 2); ?>;
 const weekendCount = <?php echo json_encode($_SESSION['weekend'] ?? 1); ?>;
-const holidayCount = 1; 
+const holidayCount = 0; 
 
 let currentIndex = 0;
 

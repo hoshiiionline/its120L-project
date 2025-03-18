@@ -69,6 +69,13 @@
       responseBox.textContent = 'You asked: ' + userText;
     }
   </script>
-  <script src="script.js"></script>
+  <script src="../chatbot/script.js"></script>
+  <script>
+  // Add error handling for script loading
+  window.onerror = function(msg, url, lineNo, columnNo, error) {
+      console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError: ' + error);
+      return false;
+  };
+  </script>
 </body>
 </html>

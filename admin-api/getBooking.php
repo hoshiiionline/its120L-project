@@ -29,7 +29,7 @@ if ($bookingID) {
         $endDate = new DateTime($data['dateReservedEnd']);
         $endDate->modify('+1 day'); // Include the last day in the loop
 
-        $period = new DatePeriod($startDate, new DateInterval('P1D'), $endDate);
+        $period = new DatePeriod($startDate->modify('+1 day'), new DateInterval('P1D'), $endDate);
         $weekdayCount = 0;
         $weekendCount = 0;
 
