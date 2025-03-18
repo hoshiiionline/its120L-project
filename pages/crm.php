@@ -118,8 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $stmt->execute();
       $stmt->close();
     }
-    session_unset();
-    session_destroy();
+    $_SESSION['refNo'] = $referenceNumber;
+    header("Location: thankyou.php");
   }
 }
 
