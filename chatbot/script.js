@@ -7,41 +7,30 @@ function generateResponse() {
     // Don't proceed if input is empty
     if (!text.value.trim()) return;
 
-    // Show user's message
-    const userMessage = text.value;
-    response.innerHTML += `<div class="message-bubble user-message">${userMessage}</div>`;
-
     // Disable input and button while processing
     text.disabled = true;
     button.disabled = true;
     typing.style.display = "block";
 
-    fetch("../chatbot/response.php", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
+    fetch("response.php", {
+        method: "post",
         body: JSON.stringify({
-            text: userMessage
+            text: text.value,
         }),
     })
-    .then(res => res.json()) // Change to json()
+    .then(res => res.text())
     .then(res => {
-        typing.style.display = "none";
-        // Only display the message part
-        response.innerHTML += `<div class="message-bubble bot-message">${res.message}</div>`;
-        // Scroll to bottom of chat
-        response.scrollTop = response.scrollHeight;
+        response.innerHTML = res;
     })
     .catch(error => {
+        response.innerHTML = "I apologize, but I encountered an error. Please try again.";
         console.error("Error:", error);
-        typing.style.display = "none";
-        response.innerHTML += `<div class="message-bubble bot-message">I apologize, but I encountered an error. Please try again.</div>`;
     })
     .finally(() => {
         // Re-enable input and button
         text.disabled = false;
         button.disabled = false;
+        typing.style.display = "none";
         text.value = "";
         text.focus();
     });
