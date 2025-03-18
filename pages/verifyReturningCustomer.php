@@ -1,27 +1,52 @@
 <?php
-require '../config/config.php';
+//require '../config/config.php';
 $title = "Returning Customer";
+include '../includes/header.php';
+$signal = "";
 
-if(isset($_GET['signal'])){
+
+if (isset($_GET['signal'])) {
     $signal = $_GET['signal'];
+    $_SESSION['refNo'] = $signal;
 }
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $mobile = $_POST['mobile'];
 
-    if (filter_var($email, FILTER_VALIDATE_EMAIL) && preg_match('/^[0-9]{10}$/', $mobile)) {
-        $query = "SELECT * FROM customers WHERE email = '$email' AND mobile = '$mobile'";
-        $result = mysqli_query($conn, $query);
-
-        if (mysqli_num_rows($result) > 0) {
-            header('Location: availabilityRoom.php');
+    if ($_SESSION['refNo'] == 'checkOrder') {
+        $referenceNumber = $_POST['refNo'];
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $query = "SELECT * FROM booking WHERE referenceNo = '$referenceNumber'";
+            $result = mysqli_query($conn, $query);
+    
+            if (mysqli_num_rows($result) > 0) {
+                $_SESSION['refNo'] = "";    
+                $_SESSION['refNoCheck'] = $referenceNumber;
+                header('Location: pendingBooking.php');
+            } else {
+                echo "Customer not found";
+            }
         } else {
-            echo "Customer not found";
+            echo "Invalid email or mobile number";
         }
+
     } else {
-        echo "Invalid email or mobile number";
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $query = "SELECT * FROM customer WHERE emailAddress = '$email' AND mobileNo = '$mobile'";
+            $result = mysqli_query($conn, $query);
+    
+            if (mysqli_num_rows($result) > 0) {
+                header('Location: availabilityRoom.php');
+            } else {
+                echo "Customer not found";
+            }
+        } else {
+            echo "Invalid email or mobile number";
+        }
     }
+
 }
 include "../includes/header.php";
 ?>
@@ -59,6 +84,13 @@ include "../includes/header.php";
                 <label for="mobile">Mobile Number</label>
                 <input type="tel" class="form-control" id="mobile" name="mobile" required>
             </div>
+            <?php if($signal == "checkOrder") {
+                echo '            <div class="form-group">
+                <label for="mobile">Reference Number</label>
+                <input type="text" class="form-control" id="refNo" name="refNo" required>
+            </div>';
+            }?>
+
             <button type="submit">Submit</button>
         </div>
 

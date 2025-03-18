@@ -41,7 +41,7 @@ include "../includes/header.php";
       padding-left: 4em;
   }
   .scrollable-container p {
-      tab-size 2;
+      tab-size: 2;
   }
 </style>
 </head>
