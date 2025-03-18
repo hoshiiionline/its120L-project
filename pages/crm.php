@@ -67,46 +67,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $dietaryPreference = $_POST['dietaryPreference'] ?? '';
 
   if (!empty($firstName) && !empty($lastName) && !empty($email) && !empty($phone) && !empty($dietaryPreference)) {
-    $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, mealPreference) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $firstName, $lastName, $email, $phone, $dietaryPreference);
-    if ($stmt->execute()) {
-      echo "<div class='alert alert-success'>Yess successfully submitted!</div>";
-    } else {
-      echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
-    }
-    $stmt->close();
-  } else {
-    echo "<div class='alert alert-danger'>Please fill in all required fields.</div>";
-  }
-
-  $stmt = $conn->prepare("SELECT customerID FROM customer WHERE emailAddress = ?");
-  $stmt->bind_param("s", $email);
-  $stmt->execute();
-  $result = $stmt->get_result();
-  $customerID = $result->fetch_assoc()['customerID'];
-  //echo "<div class='alert alert-success'>Here is my $customerID</div>";
-  $stmt->close();
-
-  foreach ($cart as $item) {
-    $pricingID = $item['pricingID'];
-    $pricingRateRoom = $item['pricingRateRoom']; // Room rate
-
-    // Calculate totals
-    $weekdayRate = $pricingRateRoom * 1;
-    $weekendRate = $pricingRateRoom * 1.015;
-    $holidayRate = $pricingRateRoom * 1.02;
-
-    $weekdaySubtotal = $weekdayRate * $weekdayCount;
-    $weekendSubtotal = $weekendRate * $weekendCount;
-    $holidaySubtotal = 0;
-
-    $total = ($weekdaySubtotal + $weekendSubtotal + $holidaySubtotal) * $pax;
-
-    // Insert into database
-    $stmt = $conn->prepare("INSERT INTO booking (referenceNo, customerID, pricingID, dateReservedStart, dateReservedEnd, pax, additionalRequests, estPricingTotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("siissisd", $referenceNumber, $customerID, $pricingID, $startDate, $endDate, $pax, $specialRequests, $total);
+    $stmt = $conn->prepare("SELECT customerID FROM customer WHERE (emailAddress = ? OR mobileNo = ?) AND firstName = ? AND lastName = ?");
+    $stmt->bind_param("ssss", $email, $phone, $firstName, $lastName);
     $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        $stmt->bind_result($customerID);
+        $stmt->fetch();
+        echo "<script>alert('User is existing! Using existing credentials." . $customerID . "');</script>";
+    } else {
+        $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, mealPreference) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $firstName, $lastName, $email, $phone, $dietaryPreference);
+
+        if ($stmt->execute()) {
+            $customerID = $stmt->insert_id;
+            //echo "<script>alert('Booking Successfully submitted!');</script>";
+        } else {
+            echo "<script>alert('Error: " . $stmt->error . "');</script>";
+        }
+    }
+
     $stmt->close();
+
+    $stmt = $conn->prepare("SELECT customerID FROM customer WHERE emailAddress = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $customerID = $result->fetch_assoc()['customerID'];
+    $stmt->close();
+
+    foreach ($cart as $item) {
+      $pricingID = $item['pricingID'];
+      $pricingRateRoom = $item['pricingRateRoom']; // Room rate
+
+      // Calculate totals
+      $weekdayRate = $pricingRateRoom * 1;
+      $weekendRate = $pricingRateRoom * 1.015;
+      $holidayRate = $pricingRateRoom * 1.02;
+
+      $weekdaySubtotal = $weekdayRate * $weekdayCount;
+      $weekendSubtotal = $weekendRate * $weekendCount;
+      $holidaySubtotal = 0;
+
+      $total = ($weekdaySubtotal + $weekendSubtotal + $holidaySubtotal) * $pax;
+
+      // Insert into database
+      $stmt = $conn->prepare("INSERT INTO booking (referenceNo, customerID, pricingID, dateReservedStart, dateReservedEnd, pax, additionalRequests, estPricingTotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+      $stmt->bind_param("siissisd", $referenceNumber, $customerID, $pricingID, $startDate, $endDate, $pax, $specialRequests, $total);
+      $stmt->execute();
+      $stmt->close();
+    }
+    session_unset();
+    session_destroy();
   }
 }
 
