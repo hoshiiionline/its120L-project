@@ -80,6 +80,7 @@ include "../includes/header.php";
           </tbody>  
         </table>
         <h4>Pricing Information</h4>
+        
         <table id="priceBreakdown">
         <thead>
           <tr>
@@ -119,6 +120,7 @@ include "../includes/header.php";
           </tr>
         </tfoot>
       </table>
+
       </div>
     </div>
 
