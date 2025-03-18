@@ -53,6 +53,24 @@ foreach ($period as $date) {
 $_SESSION['weekday'] = $weekdayCount;
 $_SESSION['weekend'] = $weekendCount;
 
+// if a user exists
+if (isset($_SESSION['customerID'])) {
+  $customerID = $_SESSION['customerID'];
+  $stmt = $conn->prepare("SELECT * FROM customer WHERE customerID = ?");
+  $stmt->bind_param("s", $customerID);
+  if ($stmt->execute()) {
+    $result = $stmt->get_result();
+    if ($result && $result->num_rows > 0) {
+      $customerData = $result->fetch_assoc();
+    } else {
+      $customerData = [];
+    }
+  } else {
+    $customerData = [];
+  }
+}
+
+
 if (isset($_GET["start-date"], $_GET["end-date"])) {
   $startDate = $_GET["start-date"];
   $endDate   = $_GET["end-date"];
@@ -123,39 +141,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="form">
           <div class="form-group">
             <label for="firstName">First Name</label>
-            <input type="text" id="firstName" name="firstName" placeholder="Tomas" required>
+            <input type="text" id="firstName" name="firstName" placeholder="John" value=<?php echo $customerData['firstName'];?> required>
           </div>
           <div class="form-group">
             <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" name="lastName" placeholder="Mapua" required>
+            <input type="text" id="lastName" name="lastName" placeholder="Doe" value=<?php echo $customerData['lastName'];?>required>
           </div>
         </div>
         <div class="form2">
           <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" placeholder="tomasmapua@mail.com" required>
+          <input type="email" id="email" name="email" placeholder="johndoe@mail.com" value=<?php echo $customerData['emailAddress'];?> required>
         </div>
         <div class="form2">
           <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone" placeholder="1234567890" required>
+          <input type="tel" id="phone" name="phone" placeholder="1234567890" value=<?php echo $customerData['mobileNo'];?> required>
         </div>
         <div class="form3">
-          <label for="dietaryPreference" style="text-align: left;">Dietary Preference</label>
+        <label for="dietaryPreference" style="text-align: left;">Dietary Preference</label>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference1" value="regular">
-            <label class="form-check-label" for="inlineRadio1">Regular</label>
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference1" value="regular" 
+              <?php if (isset($customerData['mealPreference']) && $customerData['mealPreference'] == 'regular') echo 'checked'; ?>>
+            <label class="form-check-label" for="dietaryPreference1">Regular</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference2" value="vegetarian">
-            <label class="form-check-label" for="inlineRadio2">Vegetarian</label>
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference2" value="vegetarian" 
+              <?php if (isset($customerData['mealPreference']) && $customerData['mealPreference'] == 'vegetarian') echo 'checked'; ?>>
+            <label class="form-check-label" for="dietaryPreference2">Vegetarian</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference3" value="others">
-            <label class="form-check-label" for="dietaryPreference">Others</label>
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference3" value="others" 
+              <?php if (isset($customerData['mealPreference']) && $customerData['mealPreference'] == 'others') echo 'checked'; ?>>
+            <label class="form-check-label" for="dietaryPreference3">Others</label>
           </div>
         </div>
         <div class="form2">
           <label for="specialRequests">Special Requests</label>
-          <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any additional details... (i.e. Allergies, etc.)"></textarea>
+          <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any additional details... (i.e. Allergies, etc.)"><?php echo $customerData['allergyList'];?></textarea>
         </div>
         <div class="form2">
           <input type="checkbox" id="dataPrivacy" name="dataPrivacy" required>

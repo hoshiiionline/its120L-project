@@ -38,7 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $result = mysqli_query($conn, $query);
     
             if (mysqli_num_rows($result) > 0) {
-                header('Location: availabilityRoom.php');
+                $row = mysqli_fetch_assoc($result);
+                $_SESSION['customerID'] = $row['customerID']; 
+                header('Location: roomAvailability.php');
             } else {
                 echo "Customer not found";
             }
