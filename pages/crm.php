@@ -7,7 +7,7 @@ $startDate = $_SESSION['startDate'];
 $endDate = $_SESSION['endDate'];
 $pax = $_SESSION['pax'];
 
-// reference No generation
+// Reference No generation
 date_default_timezone_set('UTC');
 $today = date('Y_m_d');
 $fileName = '../config/counter_' . $today . '.txt';
@@ -34,95 +34,110 @@ fclose($file);
 $formattedCounter = sprintf("%04d", $counter);
 $referenceNumber = $today . '.' . $formattedCounter;
 
-$start = new DateTime($startDate);
-$end = new DateTime($endDate);
-$interval = new DateInterval('P1D');
-$period = new DatePeriod($start->modify('+1 day'), $interval, $end->modify('+1 day'));
+// Load holidays from JSON file (dates should be in Y-m-d format)
+$holidaysJson = file_get_contents('../config/holidays.json');
+$holidaysArray = json_decode($holidaysJson, true);
+$holidayDates = array_column($holidaysArray, 'date');
 
+// Create DateTime objects for check-in and check-out dates
+$start = new DateTime($startDate);
+$end   = new DateTime($endDate);
+
+// Create an interval of one day. Note: we do not include the checkout date.
+$interval = new DateInterval('P1D');
+// Create the period from check-in to check-out (end date not included)
+$period = new DatePeriod($start, $interval, $end);
+
+// Count weekdays, weekends, and holidays
 $weekdayCount = 0;
 $weekendCount = 0;
+$holidayCount = 0;
 
 foreach ($period as $date) {
-  if (in_array($date->format('N'), [6, 7])) {
-    $weekendCount++;
-  } else {
-    $weekdayCount++;
-  }
+    $dateString = $date->format('Y-m-d');
+    // Check if the date is a holiday; if so, count it exclusively as a holiday
+    if (in_array($dateString, $holidayDates)) {
+        $holidayCount++;
+    } elseif (in_array($date->format('N'), [6, 7])) { // 6 = Saturday, 7 = Sunday
+        $weekendCount++;
+    } else {
+        $weekdayCount++;
+    }
 }
 
 $_SESSION['weekday'] = $weekdayCount;
 $_SESSION['weekend'] = $weekendCount;
+$_SESSION['holiday'] = $holidayCount;
 
 if (isset($_GET["start-date"], $_GET["end-date"])) {
-  $startDate = $_GET["start-date"];
-  $endDate   = $_GET["end-date"];
+    $startDate = $_GET["start-date"];
+    $endDate   = $_GET["end-date"];
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $firstName       = $_POST['firstName'] ?? '';
-  $lastName        = $_POST['lastName'] ?? '';
-  $email           = $_POST['email'] ?? '';
-  $phone           = $_POST['phone'] ?? '';
-  $specialRequests = $_POST['specialRequests'] ?? '';
-  $dietaryPreference = $_POST['dietaryPreference'] ?? '';
+    $firstName         = $_POST['firstName'] ?? '';
+    $lastName          = $_POST['lastName'] ?? '';
+    $email             = $_POST['email'] ?? '';
+    $phone             = $_POST['phone'] ?? '';
+    $specialRequests   = $_POST['specialRequests'] ?? '';
+    $dietaryPreference = $_POST['dietaryPreference'] ?? '';
 
-  if (!empty($firstName) && !empty($lastName) && !empty($email) && !empty($phone) && !empty($dietaryPreference)) {
-    $stmt = $conn->prepare("SELECT customerID FROM customer WHERE (emailAddress = ? OR mobileNo = ?) AND firstName = ? AND lastName = ?");
-    $stmt->bind_param("ssss", $email, $phone, $firstName, $lastName);
-    $stmt->execute();
-    $stmt->store_result();
+    if (!empty($firstName) && !empty($lastName) && !empty($email) && !empty($phone) && !empty($dietaryPreference)) {
+        $stmt = $conn->prepare("SELECT customerID FROM customer WHERE (emailAddress = ? OR mobileNo = ?) AND firstName = ? AND lastName = ?");
+        $stmt->bind_param("ssss", $email, $phone, $firstName, $lastName);
+        $stmt->execute();
+        $stmt->store_result();
 
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($customerID);
-        $stmt->fetch();
-        echo "<script>alert('User is existing! Using existing credentials.');</script>";
-    } else {
-        $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, mealPreference) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $firstName, $lastName, $email, $phone, $dietaryPreference);
-
-        if ($stmt->execute()) {
-            $customerID = $stmt->insert_id;
-            //echo "<script>alert('Booking Successfully submitted!');</script>";
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($customerID);
+            $stmt->fetch();
+            echo "<script>alert('User is existing! Using existing credentials.');</script>";
         } else {
-            echo "<script>alert('Error: " . $stmt->error . "');</script>";
+            $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, mealPreference) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssss", $firstName, $lastName, $email, $phone, $dietaryPreference);
+
+            if ($stmt->execute()) {
+                $customerID = $stmt->insert_id;
+            } else {
+                echo "<script>alert('Error: " . $stmt->error . "');</script>";
+            }
         }
+
+        $stmt->close();
+
+        $stmt = $conn->prepare("SELECT customerID FROM customer WHERE emailAddress = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $customerID = $result->fetch_assoc()['customerID'];
+        $stmt->close();
+
+        foreach ($cart as $item) {
+            $pricingID = $item['pricingID'];
+            $pricingRateRoom = $item['pricingRateRoom']; // Room rate
+
+            // Calculate totals for each category using exclusive holiday count
+            $weekdayRate    = $pricingRateRoom * 1;
+            $weekendRate    = $pricingRateRoom * 1.015;
+            $holidayRate    = $pricingRateRoom * 1.02;
+
+            $weekdaySubtotal = $weekdayRate * $weekdayCount;
+            $weekendSubtotal = $weekendRate * $weekendCount;
+            $holidaySubtotal = $holidayRate * $holidayCount;
+
+            $total = ($weekdaySubtotal + $weekendSubtotal + $holidaySubtotal) * $pax;
+
+            // Insert into database
+            $stmt = $conn->prepare("INSERT INTO booking (referenceNo, customerID, pricingID, dateReservedStart, dateReservedEnd, pax, additionalRequests, estPricingTotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("siissisd", $referenceNumber, $customerID, $pricingID, $startDate, $endDate, $pax, $specialRequests, $total);
+            $stmt->execute();
+            $stmt->close();
+        }
+        $_SESSION['refNo'] = $referenceNumber;
+        header("Location: thankyou.php");
+        exit();
     }
-
-    $stmt->close();
-
-    $stmt = $conn->prepare("SELECT customerID FROM customer WHERE emailAddress = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $customerID = $result->fetch_assoc()['customerID'];
-    $stmt->close();
-
-    foreach ($cart as $item) {
-      $pricingID = $item['pricingID'];
-      $pricingRateRoom = $item['pricingRateRoom']; // Room rate
-
-      // Calculate totals
-      $weekdayRate = $pricingRateRoom * 1;
-      $weekendRate = $pricingRateRoom * 1.015;
-      $holidayRate = $pricingRateRoom * 1.02;
-
-      $weekdaySubtotal = $weekdayRate * $weekdayCount;
-      $weekendSubtotal = $weekendRate * $weekendCount;
-      $holidaySubtotal = 0;
-
-      $total = ($weekdaySubtotal + $weekendSubtotal + $holidaySubtotal) * $pax;
-
-      // Insert into database
-      $stmt = $conn->prepare("INSERT INTO booking (referenceNo, customerID, pricingID, dateReservedStart, dateReservedEnd, pax, additionalRequests, estPricingTotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-      $stmt->bind_param("siissisd", $referenceNumber, $customerID, $pricingID, $startDate, $endDate, $pax, $specialRequests, $total);
-      $stmt->execute();
-      $stmt->close();
-    }
-    $_SESSION['refNo'] = $referenceNumber;
-    header("Location: thankyou.php");
-  }
 }
-
 ?>
 
 <link rel="stylesheet" href="../css/crm.css">
@@ -181,11 +196,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <button id="query-btn" class="submit">Submit</button>
         </div>
         <div style="text-align:left">
-          <?php echo "<a class='back' href='../pages/availableRooms.php?start-date=". urlencode(string: $startDate) . "&end-date=" . urlencode($endDate) . "&pax=".urlencode($pax)."'>< Back</a>"; ?>
+          <?php echo "<a class='back' href='../pages/availableRooms.php?start-date=" . urlencode($startDate) . "&end-date=" . urlencode($endDate) . "&pax=" . urlencode($pax) . "'>< Back</a>"; ?>
         </div>
       </form>
     </div>
-
 
     <div class="col-lg-6 container">
       <h2>Your Cart</h2>
@@ -266,7 +280,7 @@ const cartData = <?php echo json_encode($cart); ?>;
 const pax = <?php echo json_encode($_SESSION['pax'] ?? 1); ?>;
 const weekdayCount = <?php echo json_encode($_SESSION['weekday'] ?? 2); ?>;
 const weekendCount = <?php echo json_encode($_SESSION['weekend'] ?? 1); ?>;
-const holidayCount = 0; 
+const holidayCount = <?php echo json_encode($_SESSION['holiday'] ?? 0); ?>;
 
 let currentIndex = 0;
 
@@ -285,9 +299,10 @@ function updateTable() {
   
   const weekdayRate    = record.pricingRateRoom * 1;
   const weekendRate    = record.pricingRateRoom * 1.015;
+  const holidayRate    = record.pricingRateRoom * 1.02;
   const weekdaySubtotal = weekdayRate * weekdayCount;
   const weekendSubtotal = weekendRate * weekendCount;
-  const holidaySubtotal = record.pricingRateRoom * 1.02 * holidayCount;
+  const holidaySubtotal = holidayRate * holidayCount;
   const total = weekdaySubtotal + weekendSubtotal + holidaySubtotal;
   
   document.getElementById("room-type").innerText = record.roomType;
@@ -300,7 +315,7 @@ function updateTable() {
   document.getElementById("weekend-subtotal").innerText = "₱" + weekendSubtotal.toFixed(2);
   
   document.getElementById("holiday-count").innerText = holidayCount;
-  document.getElementById("holiday-rate").innerText = "₱" + (record.pricingRateRoom * 1.02).toFixed(2);
+  document.getElementById("holiday-rate").innerText = "₱" + holidayRate.toFixed(2);
   document.getElementById("holiday-subtotal").innerText = "₱" + holidaySubtotal.toFixed(2);
   
   document.getElementById("total-price").innerText = "₱" + total.toFixed(2);
@@ -324,7 +339,7 @@ function updateRoomTotals() {
     tbody.appendChild(tr);
   });
   document.getElementById('perPax').innerText = "₱" + perPax.toFixed(2);
-  document.getElementById('grandTotal').innerText = "₱" + (perPax.toFixed(2)*pax).toFixed(2);
+  document.getElementById('grandTotal').innerText = "₱" + (perPax * pax).toFixed(2);
 }
 
 document.getElementById("prevBtn").addEventListener("click", function() {

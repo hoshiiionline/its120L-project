@@ -1,0 +1,97 @@
+[
+  {
+    "date": "2025-01-01",
+    "event": "New Year's Day",
+    "holiday_type": "Regular Holiday"
+  },
+  {
+    "date": "2025-04-09",
+    "event": "Araw ng Kagitingan",
+    "holiday_type": "Regular Holiday"
+  },
+  {
+    "date": "2025-04-17",
+    "event": "Maundy Thursday",
+    "holiday_type": "Regular Holiday"
+  },
+  {
+    "date": "2025-04-18",
+    "event": "Good Friday",
+    "holiday_type": "Regular Holiday"
+  },
+  {
+    "date": "2025-05-01",
+    "event": "Labor Day",
+    "holiday_type": "Regular Holiday"
+  },
+  {
+    "date": "2025-06-12",
+    "event": "Independence Day",
+    "holiday_type": "Regular Holiday"
+  },
+  {
+    "date": "2025-08-25",
+    "event": "National Heroes Day",
+    "holiday_type": "Regular Holiday"
+  },
+  {
+    "date": "2025-11-30",
+    "event": "Bonifacio Day",
+    "holiday_type": "Regular Holiday"
+  },
+  {
+    "date": "2025-12-25",
+    "event": "Christmas Day",
+    "holiday_type": "Regular Holiday"
+  },
+  {
+    "date": "2025-12-30",
+    "event": "Rizal Day",
+    "holiday_type": "Regular Holiday"
+  },
+  {
+    "date": "2025-08-21",
+    "event": "Ninoy Aquino Day",
+    "holiday_type": "Special (Non-Working) Holiday"
+  },
+  {
+    "date": "2025-11-01",
+    "event": "All Saints' Day",
+    "holiday_type": "Special (Non-Working) Holiday"
+  },
+  {
+    "date": "2025-12-08",
+    "event": "Feast of the Immaculate Conception of Mary",
+    "holiday_type": "Special (Non-Working) Holiday"
+  },
+  {
+    "date": "2025-12-31",
+    "event": "Last Day of the Year",
+    "holiday_type": "Special (Non-Working) Holiday"
+  },
+  {
+    "date": "2025-01-29",
+    "event": "Chinese New Year",
+    "holiday_type": "Special (Non-Working) Holiday"
+  },
+  {
+    "date": "2025-04-19",
+    "event": "Black Saturday",
+    "holiday_type": "Special (Non-Working) Holiday"
+  },
+  {
+    "date": "2025-12-24",
+    "event": "Christmas Eve",
+    "holiday_type": "Special (Non-Working) Holiday"
+  },
+  {
+    "date": "2025-10-31",
+    "event": "All Saints' Day Eve",
+    "holiday_type": "Special (Non-Working) Holiday"
+  },
+  {
+    "date": "2025-02-25",
+    "event": "EDSA People Power Revolution Anniversary",
+    "holiday_type": "Special (Working) Holiday"
+  }
+]
