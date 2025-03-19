@@ -1,5 +1,5 @@
 function reloadBookings() {
-  fetch("../admin-api/pendingBooking.php")
+  fetch("../client-api/pendingBooking.php")
     .then((res) => res.json())
     .then((pendingBookings) => {
       console.log("Pending Bookings:", pendingBookings);
@@ -89,13 +89,26 @@ function displayBookingDetails(data) {
             <td>${data.dateReservedStart} - ${data.dateReservedEnd}</td>
         </tr>
         <tr>
-            <td>Pax</td>
-            <td>${data.pax}</td>
+            <td>Pax / Max Pax</td>
+            <td>
+                <input 
+                    type="number" 
+                    value="${data.pax}" 
+                    data-id="${data.bookingID}" 
+                    id="pax-val"
+                    min="1" 
+                    max="${data.occupancyMax}"
+                />
+                 / ${data.occupancyMax}
+            </td>
         </tr>
         <tr>
             <td>Status</td>
             <td>
-                ${data.status}
+                <select id="status-select" data-id="${data.bookingID}">
+                  <option value="PENDING" ${data.status === "PENDING" ? "selected" : ""}>PENDING</option>
+                  <option value="CANCEL" ${data.status === "CANCEL" ? "selected" : ""}>CANCELLED</option>
+                </select>
             </td>
         </tr>
         <tr>
@@ -144,12 +157,28 @@ function displayBookingDetails(data) {
 
   document.getElementById("total-price").innerText = "₱" + total.toFixed(2);
 
-  document
-    .querySelector("#status-select")
-    .addEventListener("change", function () {
+  document.querySelector("#status-select").addEventListener("change", function () {
       let bookingID = this.getAttribute("data-id");
       let newStatus = this.value;
       updateBookingStatus(bookingID, newStatus);
+    });
+
+    document.querySelector("#pax-val").addEventListener("change", function () {
+      let bookingID = this.getAttribute("data-id");
+  
+      let newPax = parseInt(this.value, 10);
+      let maxPax = parseInt(this.max, 10);
+  
+      if (newPax < 1) {
+          this.value = 1;
+          newPax = 1;
+      } else if (newPax > maxPax) {
+          alert("Exceeded max occupancy! Setting pax to the maximum allowed. Please book another room with a different occupancy type for additional guests.");
+          this.value = maxPax;
+          newPax = maxPax;
+      }
+  
+      updateBookingPax(bookingID, newPax);
     });
 }
 
@@ -221,8 +250,28 @@ function resetInfo() {
   document.getElementById("total-price").innerText = "";
 }
 
-function updateBookingStatus(bookingID, newStatus) {
+function updateBookingPax(bookingID, newPax) {
   fetch("../client-api/updateBooking.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ bookingID: bookingID, newPax: newPax }),
+  })
+  .then((response) => response.json())
+  .then((data) => {
+      console.log("Update Response:", data);
+      if (data.success) {
+          alert("Booking status updated successfully!");
+          reloadBookings();
+          fetchBookingDetails(bookingID);
+      } else {
+          alert("Failed to update status: " + data.error);
+      }
+  })
+  .catch((error) => console.error("Error updating booking status:", error));
+}
+
+function updateBookingStatus(bookingID, newStatus) {
+  fetch("../client-api/cancelRequest.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ bookingID: bookingID, status: newStatus }),

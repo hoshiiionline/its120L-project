@@ -16,7 +16,7 @@ $stmt = $conn->prepare("
     INNER JOIN occupancy ON pricing.occupancyID = occupancy.occupancyID
     INNER JOIN room ON room.roomID = pricing.roomID
     INNER JOIN customer ON booking.customerID = customer.customerID
-    WHERE referenceNo = ?
+    WHERE referenceNo = ? AND (status = 'PENDING' OR status = 'APPROVED' or status = 'FOR APPROVAL' or status = 'DECLINED');
 ");
 
 $stmt->bind_param("s", $_SESSION['refNoCheck']);

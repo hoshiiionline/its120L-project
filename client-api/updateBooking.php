@@ -6,30 +6,55 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 include_once "../config/config.php";
 
-// Get JSON data from request
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data["bookingID"]) || !isset($data["status"])) {
-    echo json_encode(["success" => false, "error" => "Missing parameters"]);
+if (!isset($data["bookingID"])) {
+    echo json_encode(["success" => false, "error" => "Missing booking ID"]);
     exit;
 }
 
 $bookingID = $data["bookingID"];
-$status = $data["status"];
+$updateFields = [];
+$params = [];
+$paramTypes = "";
+$returnBookingID = false;
 
-// Ensure status is valid
-$validStatuses = ["PENDING", "APPROVED", "CANCELLED"];
-if (!in_array($status, $validStatuses)) {
-    echo json_encode(["success" => false, "error" => "Invalid status"]);
+if (isset($data["newPax"])) {
+    $updateFields[] = "pax = ?";
+    $params[] = $data["newPax"];
+    $paramTypes .= "i";
+    $returnBookingID = true;
+}
+
+if (isset($data["status"])) {
+    $validStatuses = ["PENDING", "CANCEL"];
+    if (!in_array($data["status"], $validStatuses)) {
+        echo json_encode(["success" => false, "error" => "Invalid status"]);
+        exit;
+    }
+    $updateFields[] = "status = ?";
+    $params[] = $data["status"];
+    $paramTypes .= "s";
+}
+
+if (empty($updateFields)) {
+    echo json_encode(["success" => false, "error" => "No valid fields to update"]);
     exit;
 }
 
-// Update the booking status
-$stmt = $conn->prepare("UPDATE booking SET status = ? WHERE bookingID = ?");
-$stmt->bind_param("si", $status, $bookingID);
+$sql = "UPDATE booking SET " . implode(", ", $updateFields) . " WHERE bookingID = ?";
+$params[] = $bookingID;
+$paramTypes .= "i";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param($paramTypes, ...$params);
 
 if ($stmt->execute()) {
-    echo json_encode(["success" => true]);
+    $response = ["success" => true];
+    if ($returnBookingID) {
+        $response["bookingID"] = $bookingID;
+    }
+    echo json_encode($response);
 } else {
     echo json_encode(["success" => false, "error" => $stmt->error]);
 }
