@@ -91,8 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt->num_rows > 0) {
             $stmt->bind_result($customerID);
             $stmt->fetch();
-            echo "<script>alert('User is existing! Using existing credentials.')</script>";
-            echo "<script>console.log('User is existing! Using existing credentials.')</script>";
+            //echo "<script>alert('User is existing! Using existing credentials.')</script>";
+            //echo "<script>console.log('User is existing! Using existing credentials.')</script>";
 
         } else {
             $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, mealPreference) VALUES (?, ?, ?, ?, ?)");
@@ -101,8 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($stmt->execute()) {
                 $customerID = $stmt->insert_id;
             } else {
-                echo "<script>alert('Error: " . $stmt->error . "');</script>";
-                echo "<script>console.log('Error: " . $stmt->error . "');</script>";
+                //echo "<script>alert('Error: " . $stmt->error . "');</script>";
+                //echo "<script>console.log('Error: " . $stmt->error . "');</script>";
             }
         }
 
