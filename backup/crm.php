@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 
     if (!empty($firstName) && !empty($lastName) && !empty($email) && !empty($phone) && !empty($dietaryPreference)) {
-        $stmt = $conn->prepare("SELECT customerID FROM customer WHERE (emailAddress = ? AND mobileNo = ?) AND firstName = ? AND lastName = ?");
+        $stmt = $conn->prepare("SELECT customerID FROM customer WHERE (emailAddress = ? OR mobileNo = ?) AND firstName = ? AND lastName = ?");
         $stmt->bind_param("ssss", $email, $phone, $firstName, $lastName);
         $stmt->execute();
         $stmt->store_result();
@@ -150,9 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt->num_rows > 0) {
             $stmt->bind_result($customerID);
             $stmt->fetch();
-            //echo "<script>alert('User is existing! Using existing credentials.')</script>";
-            //echo "<script>console.log('User is existing! Using existing credentials.')</script>";
-
+            echo "<script>alert('User is existing! Using existing credentials.');</script>";
         } else {
             $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, mealPreference) VALUES (?, ?, ?, ?, ?)");
             $stmt->bind_param("sssss", $firstName, $lastName, $email, $phone, $dietaryPreference);
@@ -160,8 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($stmt->execute()) {
                 $customerID = $stmt->insert_id;
             } else {
-                //echo "<script>alert('Error: " . $stmt->error . "');</script>";
-                //echo "<script>console.log('Error: " . $stmt->error . "');</script>";
+                echo "<script>alert('Error: " . $stmt->error . "');</script>";
             }
         }
 

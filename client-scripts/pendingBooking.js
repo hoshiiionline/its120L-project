@@ -21,7 +21,7 @@ function updateTable(tableSelector, bookings) {
     let row = document.createElement("tr");
     row.innerHTML = `
             <td>${room.roomType}</td>
-            <td>${room.occupancyType}</td>
+            <td>${room.referenceNo}</td>
             <td>${room.dateReservedStart} - ${room.dateReservedEnd}</td>
             <td title="Email: ${room.emailAddress} | Contact: ${room.mobileNo}">
                 ${room.firstName} ${room.lastName}
@@ -69,7 +69,7 @@ function displayBookingDetails(data) {
   const weekdayRate = data.pricingRateRoom * 1;
   const weekendRate = data.pricingRateRoom * 1.015;
   const weekdaySubtotal = weekdayRate * data.weekdayCount * data.pax;
-  const weekendSubtotal = weekendRate * data.weekendCount *data.pax;
+  const weekendSubtotal = weekendRate * data.weekendCount * data.pax;
   const holidaySubtotal = data.pricingRateRoom * 1.02 * 0 * data.pax;
   const total = weekdaySubtotal + weekendSubtotal + holidaySubtotal;
 
@@ -105,10 +105,7 @@ function displayBookingDetails(data) {
         <tr>
             <td>Status</td>
             <td>
-                <select id="status-select" data-id="${data.bookingID}">
-                  <option value="PENDING" ${data.status === "PENDING" ? "selected" : ""}>PENDING</option>
-                  <option value="CANCEL" ${data.status === "CANCEL" ? "selected" : ""}>CANCELLED</option>
-                </select>
+                  ${data.status}
             </td>
         </tr>
         <tr>
@@ -157,29 +154,33 @@ function displayBookingDetails(data) {
 
   document.getElementById("total-price").innerText = "₱" + total.toFixed(2);
 
-  document.querySelector("#status-select").addEventListener("change", function () {
+  document
+    .querySelector("#status-select")
+    .addEventListener("change", function () {
       let bookingID = this.getAttribute("data-id");
       let newStatus = this.value;
       updateBookingStatus(bookingID, newStatus);
     });
 
-    document.querySelector("#pax-val").addEventListener("change", function () {
-      let bookingID = this.getAttribute("data-id");
-  
-      let newPax = parseInt(this.value, 10);
-      let maxPax = parseInt(this.max, 10);
-  
-      if (newPax < 1) {
-          this.value = 1;
-          newPax = 1;
-      } else if (newPax > maxPax) {
-          alert("Exceeded max occupancy! Setting pax to the maximum allowed. Please book another room with a different occupancy type for additional guests.");
-          this.value = maxPax;
-          newPax = maxPax;
-      }
-  
-      updateBookingPax(bookingID, newPax);
-    });
+  document.querySelector("#pax-val").addEventListener("change", function () {
+    let bookingID = this.getAttribute("data-id");
+
+    let newPax = parseInt(this.value, 10);
+    let maxPax = parseInt(this.max, 10);
+
+    if (newPax < 1) {
+      this.value = 1;
+      newPax = 1;
+    } else if (newPax > maxPax) {
+      alert(
+        "Exceeded max occupancy! Setting pax to the maximum allowed. Please book another room with a different occupancy type for additional guests."
+      );
+      this.value = maxPax;
+      newPax = maxPax;
+    }
+
+    updateBookingPax(bookingID, newPax);
+  });
 }
 
 function resetInfo() {
@@ -252,22 +253,22 @@ function resetInfo() {
 
 function updateBookingPax(bookingID, newPax) {
   fetch("../client-api/updateBooking.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ bookingID: bookingID, newPax: newPax }),
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ bookingID: bookingID, newPax: newPax }),
   })
-  .then((response) => response.json())
-  .then((data) => {
+    .then((response) => response.json())
+    .then((data) => {
       console.log("Update Response:", data);
       if (data.success) {
-          alert("Booking status updated successfully!");
-          reloadBookings();
-          fetchBookingDetails(bookingID);
+        alert("Booking status updated successfully!");
+        reloadBookings();
+        fetchBookingDetails(bookingID);
       } else {
-          alert("Failed to update status: " + data.error);
+        alert("Failed to update status: " + data.error);
       }
-  })
-  .catch((error) => console.error("Error updating booking status:", error));
+    })
+    .catch((error) => console.error("Error updating booking status:", error));
 }
 
 function updateBookingStatus(bookingID, newStatus) {

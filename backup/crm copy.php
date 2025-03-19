@@ -7,31 +7,6 @@ $startDate = $_SESSION['startDate'];
 $endDate = $_SESSION['endDate'];
 $pax = $_SESSION['pax'];
 
-$firstName = "";
-$lastName = "";
-$email = "";
-$mobile = "";
-$dietaryPreference = "";
-$specialRequests = "";
-
-if(isset($_SESSION['returning'])) {
-  $customerID = $_SESSION['returning'];
-  $query = "SELECT * FROM customer WHERE customerID = '$customerID'";
-  $result = mysqli_query($conn, $query);
-
-  if (mysqli_num_rows($result) > 0) {
-      $row = mysqli_fetch_assoc($result);
-      $firstName = $row['firstName'];
-      $lastName = $row['lastName'];
-      $email = $row['emailAddress'];
-      $mobile = $row['mobileNo'];
-      $dietaryPreference = $row['mealPreference'];
-      $specialRequests = $row['allergyList'];
-  } else {
-      echo "Customer not found";
-  }
-}
-
 // Reference No generation
 date_default_timezone_set('UTC');
 $today = date('Y_m_d');
@@ -106,43 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $phone             = $_POST['phone'] ?? '';
     $specialRequests   = $_POST['specialRequests'] ?? '';
     $dietaryPreference = $_POST['dietaryPreference'] ?? '';
-    $updateRecord      = $_POST['updateRecord'] ?? 'no'; 
-
-    if (isset($_SESSION['returning']) && $updateRecord === 'yes') {
-      $customerID = $_SESSION['returning'];
-      $stmt = $conn->prepare("UPDATE customer SET firstName = ?, lastName = ?, emailAddress = ?, mobileNo = ?, mealPreference = ?, allergyList = ? WHERE customerID = ?");
-      $stmt->bind_param("ssssssi", $firstName, $lastName, $email, $phone, $dietaryPreference, $specialRequests, $customerID);
-      if ($stmt->execute()) {
-      } else {
-          echo "<script>alert('Error updating record: " . $stmt->error . "');</script>";
-      }
-      $stmt->close();
-  } else {
-      // Your original code to either check for existing records or insert a new record.
-      $stmt = $conn->prepare("SELECT customerID FROM customer WHERE (emailAddress = ? OR mobileNo = ?) AND firstName = ? AND lastName = ?");
-      $stmt->bind_param("ssss", $email, $phone, $firstName, $lastName);
-      $stmt->execute();
-      $stmt->store_result();
-
-      if ($stmt->num_rows > 0) {
-          $stmt->bind_result($customerID);
-          $stmt->fetch();
-          echo "<script>alert('User exists! Using existing credentials.');</script>";
-      } else {
-          $stmt->close();
-          $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, mealPreference, allergyList) VALUES (?, ?, ?, ?, ?, ?)");
-          $stmt->bind_param("ssssss", $firstName, $lastName, $email, $phone, $dietaryPreference, $specialRequests);
-          if ($stmt->execute()) {
-              $customerID = $stmt->insert_id;
-          } else {
-              echo "<script>alert('Error: " . $stmt->error . "');</script>";
-          }
-      }
-      $stmt->close();
-  }
 
     if (!empty($firstName) && !empty($lastName) && !empty($email) && !empty($phone) && !empty($dietaryPreference)) {
-        $stmt = $conn->prepare("SELECT customerID FROM customer WHERE (emailAddress = ? AND mobileNo = ?) AND firstName = ? AND lastName = ?");
+        $stmt = $conn->prepare("SELECT customerID FROM customer WHERE (emailAddress = ? OR mobileNo = ?) AND firstName = ? AND lastName = ?");
         $stmt->bind_param("ssss", $email, $phone, $firstName, $lastName);
         $stmt->execute();
         $stmt->store_result();
@@ -150,9 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt->num_rows > 0) {
             $stmt->bind_result($customerID);
             $stmt->fetch();
-            //echo "<script>alert('User is existing! Using existing credentials.')</script>";
-            //echo "<script>console.log('User is existing! Using existing credentials.')</script>";
-
+            echo "<script>alert('User is existing! Using existing credentials.');</script>";
         } else {
             $stmt = $conn->prepare("INSERT INTO customer (firstName, lastName, emailAddress, mobileNo, mealPreference) VALUES (?, ?, ?, ?, ?)");
             $stmt->bind_param("sssss", $firstName, $lastName, $email, $phone, $dietaryPreference);
@@ -160,8 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($stmt->execute()) {
                 $customerID = $stmt->insert_id;
             } else {
-                //echo "<script>alert('Error: " . $stmt->error . "');</script>";
-                //echo "<script>console.log('Error: " . $stmt->error . "');</script>";
+                echo "<script>alert('Error: " . $stmt->error . "');</script>";
             }
         }
 
@@ -213,49 +151,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="form">
           <div class="form-group">
             <label for="firstName">First Name</label>
-            <input type="text" id="firstName" name="firstName" value="<?php echo $firstName;?>" placeholder="John" required>
+            <input type="text" id="firstName" name="firstName" placeholder="Tomas" required>
           </div>
           <div class="form-group">
             <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" name="lastName" value="<?php echo $lastName;?>" placeholder="Doe" required>
+            <input type="text" id="lastName" name="lastName" placeholder="Mapua" required>
           </div>
         </div>
         <div class="form2">
           <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" value="<?php echo $email;?>" placeholder="johndoe@mail.com" required>
+          <input type="email" id="email" name="email" placeholder="tomasmapua@mail.com" required>
         </div>
         <div class="form2">
           <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone" value="<?php echo $mobile;?>" placeholder="1234567890" required>
+          <input type="tel" id="phone" name="phone" placeholder="1234567890" required>
         </div>
         <div class="form3">
           <label for="dietaryPreference" style="text-align: left;">Dietary Preference</label>
-          
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference1" value="regular" 
-            <?php if (isset($dietaryPreference) && $dietaryPreference === 'regular') echo 'checked'; ?>>
-            <label class="form-check-label" for="dietaryPreference1">Regular</label>
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference1" value="regular">
+            <label class="form-check-label" for="inlineRadio1">Regular</label>
           </div>
-          
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference2" value="vegetarian" 
-            <?php if (isset($dietaryPreference) && $dietaryPreference === 'vegetarian') echo 'checked'; ?>>
-            <label class="form-check-label" for="dietaryPreference2">Vegetarian</label>
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference2" value="vegetarian">
+            <label class="form-check-label" for="inlineRadio2">Vegetarian</label>
           </div>
-          
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference3" value="others" 
-            <?php if (isset($dietaryPreference) && $dietaryPreference === 'others') echo 'checked'; ?>>
-            <label class="form-check-label" for="dietaryPreference3">Others</label>
+            <input class="form-check-input" type="radio" name="dietaryPreference" id="dietaryPreference3" value="others">
+            <label class="form-check-label" for="dietaryPreference">Others</label>
           </div>
         </div>
         <div class="form2">
           <label for="specialRequests">Special Requests</label>
-          <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any additional details... (i.e. Allergies, etc.)"><?php echo $specialRequests;?></textarea>
+          <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any additional details... (i.e. Allergies, etc.)"></textarea>
         </div>
-        <?php if(isset($_SESSION['returning'])): ?>
-          <input type="hidden" name="updateRecord" id="updateRecord" value="no">
-        <?php endif; ?>
         <div class="form2">
           <input type="checkbox" id="dataPrivacy" name="dataPrivacy" required>
           <label for="dataPrivacy">
@@ -331,35 +260,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </tbody>
         </table>
       </div>
-      <!--
+      
       <div id="perPaxContainer" style="margin-top: 10px;">
-        <h3>Est. Price: <span id="perPax"></span></h3>
+        <h3>Est. Price per Pax: <span id="perPax"></span></h3>
       </div>
-     
+
       <div id="grandTotalContainer" style="margin-top: 10px;">
         <h3>Est. Grand Total: <span id="grandTotal"></span></h3>
-      </div>-->
+      </div>
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../scripts/availableRooms.js"></script>
-<?php if(isset($_SESSION['returning'])): ?>
-  <script>
-    // Attach an event listener only if this is a returning customer.
-    document.querySelector('form').addEventListener('submit', function(e) {
-      // Show a confirmation dialog.
-      if (!confirm("You are a returning customer. Do you want to update your record with the new details?")) {
-        // If the user cancels, prevent form submission.
-        e.preventDefault();
-      } else {
-        // If the user confirms, mark the update flag.
-        document.getElementById('updateRecord').value = 'yes';
-      }
-    });
-  </script>
-<?php endif; ?>
+
 <script>
 const cartData = <?php echo json_encode($cart); ?>;
 const pax = <?php echo json_encode($_SESSION['pax'] ?? 1); ?>;

@@ -82,21 +82,24 @@ INSERT INTO Occupancy (occupancyType, occupancyMin, occupancyMax) VALUES
 
 INSERT INTO Pricing (roomID, occupancyID, pricingRateRoom, pricingRatePackage, rateRoom)
 VALUES
-  (1, 1, 5183, 7625.4, 0),
-  (1, 2, 4686, 9570.8, 1),
-  (1, 3, 4217.4, 11544.6, 1),
-  (2, 1, 5183, 7625.4, 0),
-  (2, 2, 4686, 9570.8, 1),
-  (3, 1, 639, 5921.4, 0),
-  (3, 6, 3479, 3081.4, 0),
-  (3, 1, 639, 5921.4, 0),
-  (3, 5, 3479, 3081.4, 0),
-  (5, 1, 3479, 5921.4, 0),
-  (5, 2, 2982, 7866.8, 1),
-  (6, 1, 3749, 5921.4, 0),
-  (6, 2, 2982, 7866.8, 1),
-  (7, 7, 1150, 3592.6, 1),
-  (7, 8, 639, 3081.4, 1),
-  (8, 10, 80490, 710000, 0);
+  (0, 0, 5183,    7625.4,  0),  -- Batcave 1 Solo
+  (0, 1, 4686,    9570.8,  1),  -- Batcave 1 Twin
+  (0, 2, 4217.4,  11544.6, 1),  -- Batcave 1 Triple
+  (1, 0, 5183,    7625.4,  0),  -- Batcave 2 Solo
+  (1, 1, 4686,    9570.8,  1),  -- Batcave 2 Twin
+  (2, 0, 639,     5921.4,  0),  -- Ledge Bed RW Solo
+  (2, 5, 3479,    3081.4,  0),  -- Ledge Bed RW Group
+  (2, 0, 639,     5921.4,  0),  -- Ledge Bed LW Solo
+  (2, 4, 3479,    3081.4,  0),  -- Ledge Bed LW Group
+  (4, 0, 3479,    5921.4,  0),  -- Twin Room 1 Solo
+  (4, 1, 2982,    7866.8,  1),  -- Twin Room 1 Twin
+  (5, 0, 3749,    5921.4,  0),  -- Twin Room 2 Solo
+  (5, 1, 2982,    7866.8,  1),  -- Twin Room 2 Twin
+  (6, 6, 1150,    3592.6,  1),  -- Cave Dorm 5
+  (6, 7, 2200,    4020,    1),  -- Cave Dorm 5+
+  (7, 9, 22010,   710000,  0),  -- Whole House
+  (8, 0, 5183,    7625.4,  0),  -- Ground Floor Solo
+  (8, 1, 4686,    9570.8,  1),  -- Ground Floor Twin
+  (8, 2, 4217,    11544.6, 1);  -- Ground Floor Triple
 
 

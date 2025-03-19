@@ -18,7 +18,7 @@ $referenceNumber = $_SESSION['refNoCheck'];
           <thead>
             <tr>
               <th>Room</th>
-              <th>Occ. Type</th>
+              <th>Reference Number</th>
               <th>Dates</th>
               <th>Client</th>
               <th>Price</th>

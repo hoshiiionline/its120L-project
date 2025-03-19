@@ -17,7 +17,7 @@ include "../includes/header.php";
           <thead>
             <tr>
               <th>Room</th>
-              <th>Occ. Type</th>
+              <th>Reference No.</th>
               <th>Dates</th>
               <th>Client</th>
               <th>Price</th>

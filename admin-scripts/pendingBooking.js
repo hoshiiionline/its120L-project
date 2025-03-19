@@ -1,27 +1,27 @@
 function reloadBookings() {
-    fetch("../admin-api/pendingBooking.php")
-        .then((res) => res.json())
-        .then((pendingBookings) => {
-            console.log("Pending Bookings:", pendingBookings);
-            updateTable("#pending-booking tbody", pendingBookings);
-        })
-        .catch((error) => console.error("Error fetching bookings:", error));
+  fetch("../admin-api/pendingBooking.php")
+    .then((res) => res.json())
+    .then((pendingBookings) => {
+      console.log("Pending Bookings:", pendingBookings);
+      updateTable("#pending-booking tbody", pendingBookings);
+    })
+    .catch((error) => console.error("Error fetching bookings:", error));
 }
 
 function updateTable(tableSelector, bookings) {
-    const tableBody = document.querySelector(tableSelector);
-    if (!tableBody) {
-        console.error(`Table with selector '${tableSelector}' not found.`);
-        return;
-    }
+  const tableBody = document.querySelector(tableSelector);
+  if (!tableBody) {
+    console.error(`Table with selector '${tableSelector}' not found.`);
+    return;
+  }
 
-    tableBody.innerHTML = "";
+  tableBody.innerHTML = "";
 
-    bookings.forEach((room) => {
-        let row = document.createElement("tr");
-        row.innerHTML = `
+  bookings.forEach((room) => {
+    let row = document.createElement("tr");
+    row.innerHTML = `
             <td>${room.roomType}</td>
-            <td>${room.occupancyType}</td>
+            <td>${room.referenceNo}</td>
             <td>${room.dateReservedStart} - ${room.dateReservedEnd}</td>
             <td title="Email: ${room.emailAddress} | Contact: ${room.mobileNo}">
                 ${room.firstName} ${room.lastName}
@@ -31,51 +31,51 @@ function updateTable(tableSelector, bookings) {
                 <button class="view-booking" data-id="${room.bookingID}">View</button>
             </td>
         `;
-        tableBody.appendChild(row);
-    });
+    tableBody.appendChild(row);
+  });
 
-    document.querySelectorAll(".view-booking").forEach((button) => {
-        button.addEventListener("click", function () {
-            let bookingID = this.getAttribute("data-id");
-            fetchBookingDetails(bookingID);
-        });
+  document.querySelectorAll(".view-booking").forEach((button) => {
+    button.addEventListener("click", function () {
+      let bookingID = this.getAttribute("data-id");
+      fetchBookingDetails(bookingID);
     });
+  });
 }
 
 function fetchBookingDetails(bookingID) {
-    fetch(`../admin-api/getBooking.php?bookingID=${bookingID}`)
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("Booking Details:", data);
-            displayBookingDetails(data);
-        })
-        .catch((error) => console.error("Error fetching booking details:", error));
+  fetch(`../admin-api/getBooking.php?bookingID=${bookingID}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Booking Details:", data);
+      displayBookingDetails(data);
+    })
+    .catch((error) => console.error("Error fetching booking details:", error));
 }
 
 function reloadBookings() {
-    fetch("../admin-api/pendingBooking.php")
-        .then((res) => res.json())
-        .then((pendingBookings) => {
-            console.log("Pending Bookings:", pendingBookings);
-            updateTable("#pending-booking tbody", pendingBookings);
-        })
-        .catch((error) => console.error("Error fetching bookings:", error));
+  fetch("../admin-api/pendingBooking.php")
+    .then((res) => res.json())
+    .then((pendingBookings) => {
+      console.log("Pending Bookings:", pendingBookings);
+      updateTable("#pending-booking tbody", pendingBookings);
+    })
+    .catch((error) => console.error("Error fetching bookings:", error));
 }
 
 function displayBookingDetails(data) {
-    const detailsContainer = document.querySelector("#room-info tbody");
-    const customerContainer = document.querySelector("#customer-info tbody");
+  const detailsContainer = document.querySelector("#room-info tbody");
+  const customerContainer = document.querySelector("#customer-info tbody");
 
-    const weekdayRate    = data.pricingRateRoom * 1;
-    const weekendRate    = data.pricingRateRoom * 1.015;
-    const weekdaySubtotal = weekdayRate * data.weekdayCount * data.pax;
-    const weekendSubtotal = weekendRate * data.weekendCount * data.pax;
-    const holidaySubtotal = data.pricingRateRoom * 1.02 * 0 * data.pax;
-    const total = weekdaySubtotal + weekendSubtotal + holidaySubtotal;
+  const weekdayRate = data.pricingRateRoom * 1;
+  const weekendRate = data.pricingRateRoom * 1.015;
+  const weekdaySubtotal = weekdayRate * data.weekdayCount * data.pax;
+  const weekendSubtotal = weekendRate * data.weekendCount * data.pax;
+  const holidaySubtotal = data.pricingRateRoom * 1.02 * 0 * data.pax;
+  const total = weekdaySubtotal + weekendSubtotal + holidaySubtotal;
 
-    if (!detailsContainer || !customerContainer) return;
+  if (!detailsContainer || !customerContainer) return;
 
-    detailsContainer.innerHTML = `
+  detailsContainer.innerHTML = `
         <tr>
             <th>Desc.</th>
             <th>Info.</th>
@@ -106,11 +106,21 @@ function displayBookingDetails(data) {
             <td>Status</td>
             <td>
                 <select id="status-select" data-id="${data.bookingID}">
-                    <option value="PENDING" ${data.status === "PENDING" ? "selected" : ""}>PENDING</option>
-                    <option value="FOR APPROVAL" ${data.status === "FOR APPROVAL" ? "selected" : ""}>FOR APPROVAL</option>
-                    <option value="APPROVED" ${data.status === "APPROVED" ? "selected" : ""}>APPROVED</option>
-                    <option value="CANCEL" ${data.status === "CANCEL" ? "selected" : ""}>CANCELLED</option>
-                    <option value="DECLINED" ${data.status === "DECLINED" ? "selected" : ""}>DECLINED</option>
+                    <option value="PENDING" ${
+                      data.status === "PENDING" ? "selected" : ""
+                    }>PENDING</option>
+                    <option value="FOR APPROVAL" ${
+                      data.status === "FOR APPROVAL" ? "selected" : ""
+                    }>FOR APPROVAL</option>
+                    <option value="APPROVED" ${
+                      data.status === "APPROVED" ? "selected" : ""
+                    }>APPROVED</option>
+                    <option value="CANCEL" ${
+                      data.status === "CANCEL" ? "selected" : ""
+                    }>CANCELLED</option>
+                    <option value="DECLINED" ${
+                      data.status === "DECLINED" ? "selected" : ""
+                    }>DECLINED</option>
                 </select>
             </td>
         </tr>
@@ -120,7 +130,7 @@ function displayBookingDetails(data) {
         </tr>
     `;
 
-    customerContainer.innerHTML = `
+  customerContainer.innerHTML = `
         <tr>
             <th>Desc.</th>
             <th>Info.</th>
@@ -138,54 +148,64 @@ function displayBookingDetails(data) {
             <td>${data.mobileNo}</td>
         </tr>
     `;
-    
-    document.getElementById("room-type").innerText = data.roomType;
-    document.getElementById("weekday-count").innerText = data.weekdayCount;
-    document.getElementById("weekday-rate").innerText = "₱" + weekdayRate.toFixed(2);
-    document.getElementById("weekday-subtotal").innerText = "₱" + weekdaySubtotal.toFixed(2);
-    
-    document.getElementById("weekend-count").innerText = data.weekendCount;
-    document.getElementById("weekend-rate").innerText = "₱" + weekendRate.toFixed(2);
-    document.getElementById("weekend-subtotal").innerText = "₱" + weekendSubtotal.toFixed(2);
-    
-    document.getElementById("holiday-count").innerText = 0;
-    document.getElementById("holiday-rate").innerText = "₱" + (data.pricingRateRoom * 1.02).toFixed(2);
-    document.getElementById("holiday-subtotal").innerText = "₱" + holidaySubtotal.toFixed(2);
-    
-    document.getElementById("total-price").innerText = "₱" + total.toFixed(2);
 
-    document.querySelector("#status-select").addEventListener("change", function () {
-        let bookingID = this.getAttribute("data-id");
-        let newStatus = this.value;
-        updateBookingStatus(bookingID, newStatus);
+  document.getElementById("room-type").innerText = data.roomType;
+  document.getElementById("weekday-count").innerText = data.weekdayCount;
+  document.getElementById("weekday-rate").innerText =
+    "₱" + weekdayRate.toFixed(2);
+  document.getElementById("weekday-subtotal").innerText =
+    "₱" + weekdaySubtotal.toFixed(2);
+
+  document.getElementById("weekend-count").innerText = data.weekendCount;
+  document.getElementById("weekend-rate").innerText =
+    "₱" + weekendRate.toFixed(2);
+  document.getElementById("weekend-subtotal").innerText =
+    "₱" + weekendSubtotal.toFixed(2);
+
+  document.getElementById("holiday-count").innerText = 0;
+  document.getElementById("holiday-rate").innerText =
+    "₱" + (data.pricingRateRoom * 1.02).toFixed(2);
+  document.getElementById("holiday-subtotal").innerText =
+    "₱" + holidaySubtotal.toFixed(2);
+
+  document.getElementById("total-price").innerText = "₱" + total.toFixed(2);
+
+  document
+    .querySelector("#status-select")
+    .addEventListener("change", function () {
+      let bookingID = this.getAttribute("data-id");
+      let newStatus = this.value;
+      updateBookingStatus(bookingID, newStatus);
     });
 
-    document.querySelector("#pax-val").addEventListener("change", function () {
-        let bookingID = this.getAttribute("data-id");
-    
-        let newPax = parseInt(this.value, 10);
-        let maxPax = parseInt(this.max, 10);
-    
-        if (newPax < 1) {
-            this.value = 1;
-            newPax = 1;
-        } else if (newPax > maxPax) {
-            alert("Exceeded max occupancy! Setting pax to the maximum allowed. Please book another room with a different occupancy type for additional guests.");
-            this.value = maxPax;
-            newPax = maxPax;
-        }
-    
-        updateBookingPax(bookingID, newPax);
-    });
+  document.querySelector("#pax-val").addEventListener("change", function () {
+    let bookingID = this.getAttribute("data-id");
+
+    let newPax = parseInt(this.value, 10);
+    let maxPax = parseInt(this.max, 10);
+
+    if (newPax < 1) {
+      this.value = 1;
+      newPax = 1;
+    } else if (newPax > maxPax) {
+      alert(
+        "Exceeded max occupancy! Setting pax to the maximum allowed. Please book another room with a different occupancy type for additional guests."
+      );
+      this.value = maxPax;
+      newPax = maxPax;
+    }
+
+    updateBookingPax(bookingID, newPax);
+  });
 }
 
-function resetInfo(){
-    const detailsContainer = document.querySelector("#room-info tbody");
-    const customerContainer = document.querySelector("#customer-info tbody");
+function resetInfo() {
+  const detailsContainer = document.querySelector("#room-info tbody");
+  const customerContainer = document.querySelector("#customer-info tbody");
 
-    if (!detailsContainer || !customerContainer) return;
+  if (!detailsContainer || !customerContainer) return;
 
-    detailsContainer.innerHTML = `
+  detailsContainer.innerHTML = `
         <tr>
             <th>Desc.</th>
             <th>Info.</th>
@@ -212,7 +232,7 @@ function resetInfo(){
         </tr>
     `;
 
-    customerContainer.innerHTML = `
+  customerContainer.innerHTML = `
         <tr>
             <th>Desc.</th>
             <th>Info.</th>
@@ -231,61 +251,60 @@ function resetInfo(){
         </tr>
     `;
 
-    document.getElementById("room-type").innerText = "Room Type";
-    document.getElementById("weekday-count").innerText = "";
-    document.getElementById("weekday-rate").innerText = "";
-    document.getElementById("weekday-subtotal").innerText = "";
-    
-    document.getElementById("weekend-count").innerText = "";
-    document.getElementById("weekend-rate").innerText = "";
-    document.getElementById("weekend-subtotal").innerText = "";
-    
-    document.getElementById("holiday-count").innerText = "";
-    document.getElementById("holiday-rate").innerText = "";
-    document.getElementById("holiday-subtotal").innerText = "";
-    
-    document.getElementById("total-price").innerText = "";
+  document.getElementById("room-type").innerText = "Room Type";
+  document.getElementById("weekday-count").innerText = "";
+  document.getElementById("weekday-rate").innerText = "";
+  document.getElementById("weekday-subtotal").innerText = "";
+
+  document.getElementById("weekend-count").innerText = "";
+  document.getElementById("weekend-rate").innerText = "";
+  document.getElementById("weekend-subtotal").innerText = "";
+
+  document.getElementById("holiday-count").innerText = "";
+  document.getElementById("holiday-rate").innerText = "";
+  document.getElementById("holiday-subtotal").innerText = "";
+
+  document.getElementById("total-price").innerText = "";
 }
 
 function updateBookingPax(bookingID, newPax) {
-    fetch("../admin-api/updateBooking.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookingID: bookingID, newPax: newPax }),
-    })
+  fetch("../admin-api/updateBooking.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ bookingID: bookingID, newPax: newPax }),
+  })
     .then((response) => response.json())
     .then((data) => {
-        console.log("Update Response:", data);
-        if (data.success) {
-            alert("Booking status updated successfully!");
-            reloadBookings();
-            fetchBookingDetails(bookingID);
-        } else {
-            alert("Failed to update status: " + data.error);
-        }
+      console.log("Update Response:", data);
+      if (data.success) {
+        alert("Booking status updated successfully!");
+        reloadBookings();
+        fetchBookingDetails(bookingID);
+      } else {
+        alert("Failed to update status: " + data.error);
+      }
     })
     .catch((error) => console.error("Error updating booking status:", error));
 }
 
 function updateBookingStatus(bookingID, newStatus) {
-    fetch("../admin-api/updateBooking.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookingID: bookingID, status: newStatus }),
-    })
+  fetch("../admin-api/updateBooking.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ bookingID: bookingID, status: newStatus }),
+  })
     .then((response) => response.json())
     .then((data) => {
-        console.log("Update Response:", data);
-        if (data.success) {
-            alert("Booking status updated successfully!");
-            reloadBookings();
-            resetInfo();
-        } else {
-            alert("Failed to update status: " + data.error);
-        }
+      console.log("Update Response:", data);
+      if (data.success) {
+        alert("Booking status updated successfully!");
+        reloadBookings();
+        resetInfo();
+      } else {
+        alert("Failed to update status: " + data.error);
+      }
     })
     .catch((error) => console.error("Error updating booking status:", error));
 }
-
 
 reloadBookings();
