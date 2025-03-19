@@ -90,7 +90,7 @@ function displayBookingDetails(data) {
         </tr>
         <tr>
             <td>Pax</td>
-            <td>${data.pax}</td>
+            <td><input type="number" value="${data.pax}" data-id="${data.bookingID}" id="pax-val"/></td>
         </tr>
         <tr>
             <td>Status</td>
@@ -147,13 +147,17 @@ function displayBookingDetails(data) {
 
   document.getElementById("total-price").innerText = "₱" + total.toFixed(2);
 
-  document
-    .querySelector("#status-select")
-    .addEventListener("change", function () {
+  document.querySelector("#status-select").addEventListener("change", function () {
       let bookingID = this.getAttribute("data-id");
       let newStatus = this.value;
       updateBookingStatus(bookingID, newStatus);
     });
+
+  document.querySelector("#pax-val").addEventListener("change", function () {
+      let bookingID = this.getAttribute("data-id");
+      let newPax = this.value;
+      updateBookingPax(bookingID, newPax);
+  });
 }
 
 function resetInfo() {
@@ -222,6 +226,26 @@ function resetInfo() {
   document.getElementById("holiday-subtotal").innerText = "";
 
   document.getElementById("total-price").innerText = "";
+}
+
+function updateBookingPax(bookingID, newPax) {
+  fetch("../client-api/updateBooking.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ bookingID: bookingID, newPax: newPax }),
+  })
+  .then((response) => response.json())
+  .then((data) => {
+      console.log("Update Response:", data);
+      if (data.success) {
+          alert("Booking status updated successfully!");
+          reloadBookings();
+          fetchBookingDetails(bookingID);
+      } else {
+          alert("Failed to update status: " + data.error);
+      }
+  })
+  .catch((error) => console.error("Error updating booking status:", error));
 }
 
 function updateBookingStatus(bookingID, newStatus) {
