@@ -1,106 +1,174 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 body {
-    font-family: 'Poppins', sans-serif;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 .background1 {
-    background-image: url("../assets/view1blur.jpg");
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
+  background-image: url("../assets/view1blur.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .container {
-    background: white;
-    padding: 2.5em;
-    text-align: center;
-    margin: auto;
+  background: white;
+  padding: 2.5em;
+  text-align: center;
+  margin: auto;
 }
 
 .options {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    background: white;
-    text-align: center;
-    justify-content: center;
-    gap: 1em;
-    margin-bottom: 1em;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background: white;
+  text-align: center;
+  justify-content: center;
+  gap: 1em;
+  margin-bottom: 1em;
 }
 
 .option-container {
-    width: 24em;
-    height: 18em;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    border-radius: 20px;
-    margin: 0.5em;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
+  width: 24em;
+  height: 18em;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 20px;
+  margin: 0.5em;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out,
+    text-decoration 0.3s ease-in-out;
 }
 
 .option-container:hover {
-    transform: scale(1.1);
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
+  transform: scale(1.1);
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
 }
 
 h2 {
-    color: #425D8A;
-    font-weight: 800;
-    font-size: 2.5em;
-    margin-top: 0.5em;
-    margin-bottom: 1em;
+  color: #425d8a;
+  font-weight: 800;
+  font-size: 2.5em;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
 }
 
 .label {
-    font-size: 2em;
-    font-weight: 800;
-    color: white;
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-decoration-thickness: 2px;
-    transition: text-decoration-color 0.3s ease-in-out;
-
+  font-size: 2em;
+  font-weight: 800;
+  color: white;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  transition: text-decoration-color 0.3s ease-in-out;
 }
 
 .option-container:hover .label {
-    text-decoration-color: white;
+  text-decoration-color: white;
 }
 
-
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .back {
-    padding-left: 2vw;
-    text-align: left;
-    color: #6884AC;
+  padding-left: 2vw;
+  text-align: left;
+  color: #6884ac;
 }
 
 .back:hover {
-    color: #425D8A;
-    font-weight: bold;
+  color: #425d8a;
+  font-weight: bold;
 }
 
 .footer {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    font-size: 1vw;
-    font-weight: 100;
-    font-style: normal;
-    color: white;
-    margin-right: 2vw;
-    margin-bottom: 1vw;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  font-size: 1vw;
+  font-weight: 100;
+  font-style: normal;
+  color: white;
+  margin-right: 2vw;
+  margin-bottom: 1vw;
+}
+
+.modal-overlay {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999; /* Ensure overlay is on top */
+}
+
+/* --- Modal Box --- */
+.modal-box {
+  background: #fff;
+  max-width: 600px;
+  margin: 5% auto; /* Center the box in the viewport */
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  position: relative; /* For close button positioning */
+}
+
+/* --- Close Button --- */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* --- Table Styles (Basic) --- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background-color: #f5f5f5;
+}
+
+/* --- Optional: Button Style --- */
+#diffButton {
+  box-sizing: border-box;
+  width: 65%;
+  padding: 0.8em;
+  font-size: 1em;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  background-color: #6884ac;
+  transition: background 0.3s ease;
+  margin-bottom: 1em;
+}
+
+#diffButton:hover {
+  background-color: #425d8a;
 }
