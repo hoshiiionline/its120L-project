@@ -89,8 +89,18 @@ function displayBookingDetails(data) {
             <td>${data.dateReservedStart} - ${data.dateReservedEnd}</td>
         </tr>
         <tr>
-            <td>Pax</td>
-            <td><input type="number" value="${data.pax}" data-id="${data.bookingID}" id="pax-val"/></td>
+            <td>Pax / Max Pax</td>
+            <td>
+                <input 
+                    type="number" 
+                    value="${data.pax}" 
+                    data-id="${data.bookingID}" 
+                    id="pax-val"
+                    min="1" 
+                    max="${data.occupancyMax}"
+                />
+                 / ${data.occupancyMax}
+            </td>
         </tr>
         <tr>
             <td>Status</td>
@@ -153,11 +163,23 @@ function displayBookingDetails(data) {
       updateBookingStatus(bookingID, newStatus);
     });
 
-  document.querySelector("#pax-val").addEventListener("change", function () {
+    document.querySelector("#pax-val").addEventListener("change", function () {
       let bookingID = this.getAttribute("data-id");
-      let newPax = this.value;
+  
+      let newPax = parseInt(this.value, 10);
+      let maxPax = parseInt(this.max, 10);
+  
+      if (newPax < 1) {
+          this.value = 1;
+          newPax = 1;
+      } else if (newPax > maxPax) {
+          alert("Exceeded max occupancy! Setting pax to the maximum allowed. Please book another room with a different occupancy type for additional guests.");
+          this.value = maxPax;
+          newPax = maxPax;
+      }
+  
       updateBookingPax(bookingID, newPax);
-  });
+    });
 }
 
 function resetInfo() {

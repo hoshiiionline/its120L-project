@@ -69,7 +69,7 @@ include "../includes/header.php";
               <td>Please Select a Record</td>
           </tr>
           <tr>
-              <td>Pax</td>
+              <td>Pax / Max Pax</td>
               <td>Please Select a Record</td>
           </tr>
           <tr>
