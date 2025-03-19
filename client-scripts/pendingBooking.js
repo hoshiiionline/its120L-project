@@ -104,7 +104,7 @@ function displayBookingDetails(data) {
         </tr>
         <tr>
             <td>Status</td>
-            <td>
+            <td id="statusCell">
                   ${data.status}
             </td>
         </tr>
@@ -113,6 +113,18 @@ function displayBookingDetails(data) {
             <td>₱${data.pricingRateRoom} per Pax</td>
         </tr>
     `;
+  
+  const statusCell = document.getElementById("statusCell");
+  const status = statusCell.innerText.trim();
+
+  const statusColors = {
+      "APPROVED": "green",
+      "CANCEL": "red",
+      "DECLINED": "red",
+      "FOR APPROVAL": "yellow"
+  };
+
+  statusCell.style.color = statusColors[status] || "black";
 
   customerContainer.innerHTML = `
         <tr>
