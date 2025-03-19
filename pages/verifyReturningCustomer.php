@@ -36,11 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $query = "SELECT * FROM customer WHERE emailAddress = '$email' AND mobileNo = '$mobile'";
             $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
     
             if (mysqli_num_rows($result) > 0) {
-                $_SESSION['returning'] = $row['customerID'];
-                header('Location: roomAvailability.php');
+                header('Location: availabilityRoom.php');
             } else {
                 echo "Customer not found";
             }
