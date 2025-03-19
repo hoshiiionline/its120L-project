@@ -29,7 +29,7 @@ while ($row = $result->fetch_assoc()) {
         "id" => $row["bookingID"],
         "title" => $row["roomType"] . " - " . $row["firstName"] . " " . $row["lastName"],
         "start" => date("Y-m-d", strtotime($row["dateReservedStart"])),
-        "end" => date("Y-m-d", strtotime($row["dateReservedEnd"])),
+        "end" => date("Y-m-d", strtotime($row["dateReservedEnd"] . " +1 day")),
     ];
 }
 
