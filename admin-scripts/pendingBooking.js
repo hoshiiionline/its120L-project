@@ -99,7 +99,7 @@ function displayBookingDetails(data) {
                     <option value="PENDING" ${data.status === "PENDING" ? "selected" : ""}>PENDING</option>
                     <option value="FOR APPROVAL" ${data.status === "FOR APPROVAL" ? "selected" : ""}>FOR APPROVAL</option>
                     <option value="APPROVED" ${data.status === "APPROVED" ? "selected" : ""}>APPROVED</option>
-                    <option value="CANCELLED" ${data.status === "CANCEL" ? "selected" : ""}>CANCELLED</option>
+                    <option value="CANCEL" ${data.status === "CANCEL" ? "selected" : ""}>CANCELLED</option>
                     <option value="DECLINED" ${data.status === "DECLINED" ? "selected" : ""}>DECLINED</option>
                 </select>
             </td>

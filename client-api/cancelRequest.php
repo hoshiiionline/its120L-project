@@ -18,7 +18,7 @@ $bookingID = $data["bookingID"];
 $status = $data["status"];
 
 // Ensure status is valid
-$validStatuses = ["PENDING", "FOR APPROVAL", "APPROVED", "DECLINED", "CANCEL"];
+$validStatuses = ["PENDING", "CANCEL"];
 if (!in_array($status, $validStatuses)) {
     echo json_encode(["success" => false, "error" => "Invalid status"]);
     exit;

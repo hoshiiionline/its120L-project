@@ -1,5 +1,5 @@
 function reloadBookings() {
-  fetch("../admin-api/pendingBooking.php")
+  fetch("../client-api/pendingBooking.php")
     .then((res) => res.json())
     .then((pendingBookings) => {
       console.log("Pending Bookings:", pendingBookings);
@@ -95,7 +95,10 @@ function displayBookingDetails(data) {
         <tr>
             <td>Status</td>
             <td>
-                ${data.status}
+                <select id="status-select" data-id="${data.bookingID}">
+                  <option value="PENDING" ${data.status === "PENDING" ? "selected" : ""}>PENDING</option>
+                  <option value="CANCEL" ${data.status === "CANCEL" ? "selected" : ""}>CANCELLED</option>
+                </select>
             </td>
         </tr>
         <tr>
@@ -222,7 +225,7 @@ function resetInfo() {
 }
 
 function updateBookingStatus(bookingID, newStatus) {
-  fetch("../client-api/updateBooking.php", {
+  fetch("../client-api/cancelRequest.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ bookingID: bookingID, status: newStatus }),
