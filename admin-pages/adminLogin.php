@@ -7,6 +7,11 @@ $title = "Admin Login";
 $adminEmail = 'banahawcircle';
 $adminPassword = password_hash('admin', PASSWORD_DEFAULT);
 
+$query = "INSERT INTO admin (username, password) VALUES (?, ?)";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("ss", $adminEmail, $adminPassword);
+$stmt->execute();
+
 $adminEmail = 'root';
 $adminPassword = password_hash('root', PASSWORD_DEFAULT);
 
@@ -46,41 +51,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="../css/verifyReturningCustomer.css">
-</head>
-<body class="background1">
-<div class="container">
-    <div><img src="../assets/logoflat.png" width="30%"></div>
-    <h2>ADMIN LOGIN</h2>
-    <h3>Please Enter Credentials</h3>
-    <div class="tooltip">?
-        <span class="tooltiptext">Tooltip text</span>
-    </div>
-    <br>
-    <?php 
-    // Display error message if login fails
-    if (isset($error)) { 
-        echo "<p style='color:red;'>$error</p>"; 
-    } 
-    ?>
-    <form action="adminLogin.php" method="POST">
-        <div class="form">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <button type="submit">Login</button>
+    <head>
+        <link rel="stylesheet" href="../css/verifyReturningCustomer.css">
+    </head>
+    <body class="background1">
+        <div class="container">
+            <div><img src="../assets/logoflat.png" width="30%"></div>
+            <h2>ADMIN LOGIN</h2>
+            <h3>Please Enter Credentials</h3>
+                <div class="tooltip">?
+                    <span class="tooltiptext">Tooltip text</span>
+                </div>
+            <br>
+            <?php 
+            // Display error message if login fails
+            if (isset($error)) { 
+                echo "<p style='color:red;'>$error</p>"; 
+            } 
+            ?>
+            <form action="adminLogin.php" method="POST">
+                <div class="form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit">Login</button>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
-<div class="footer">© 2025 Banahaw Circle Nature Retreat</div>
-<?php include "../includes/footer.php"; ?>
-</body>
+        <div class="footer">Â© 2025 Banahaw Circle Nature Retreat</div>
+        <?php include "../includes/footer.php"; ?>
+    </body>
 </html>

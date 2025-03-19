@@ -26,7 +26,9 @@ if (isset($_GET["start-date"], $_GET["end-date"], $_GET["pax"])) {
         LEFT JOIN booking ON pricing.pricingID = booking.pricingID 
             AND booking.dateReservedStart <= ?
             AND booking.dateReservedEnd >= ?
-        WHERE booking.bookingID IS NULL and occupancy.occupancyMax >= ?
+            AND booking.status IN ('FOR APPROVAL', 'APPROVED')
+        WHERE (booking.bookingID IS NULL OR booking.status = 'PENDING') 
+        AND occupancy.occupancyMax >= ?
         ORDER BY occupancy.occupancyMax;
     ");
 

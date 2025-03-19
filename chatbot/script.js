@@ -12,7 +12,7 @@ function generateResponse() {
     button.disabled = true;
     typing.style.display = "block";
 
-    fetch("response.php", {
+    fetch("../chatbot/response.php", {
         method: "post",
         body: JSON.stringify({
             text: text.value,

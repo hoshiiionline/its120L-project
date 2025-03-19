@@ -6,6 +6,7 @@ use GeminiAPI\Client;
 use GeminiAPI\Resources\Parts\TextPart;
 
 $data = json_decode(file_get_contents("php://input"));
+//$data = (object) ["text" => "Hello, this is a dummy message."];
 
 // Add context to the prompt
 $trainingData = file_get_contents("../assets/trainingData.txt");
@@ -39,7 +40,7 @@ User question: ";
 
 $text = $context . $data->text;
 
-$client = new Client("AIzaSyCU4G6l49sOAqX3UO7_NN60eTj7eLQ2Vxc"); //Gemini API key
+$client = new Client("AIzaSyD7NGnqP016YFqE3Up_H80ChpWV7274pxI"); //Gemini API key
 
 try {
     $response = $client->geminiPro15()->generateContent(
@@ -48,6 +49,11 @@ try {
 
     echo $response->text();
 } catch (Exception $e) {
-    echo "I apologize, but I encountered an error. Please try again.";
-    error_log("Gemini API Error: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error',
+        'message' => "I apologize, but I encountered an error. Please try again.",
+        'debug' => $e->getMessage()
+    ]);
+    error_log("Chatbot Error: " . $e->getMessage());
 }

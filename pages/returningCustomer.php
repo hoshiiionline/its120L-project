@@ -41,6 +41,10 @@ include "../includes/header.php";
             </a>
         </div>
     </div>
+    <label for="dataPrivacy">
+            Would you like to check on your order?
+            <a href="verifyReturningCustomer.php?signal=<?php echo urlencode("checkOrder"); ?>" target="_blank">Click here</a>
+            </label>
     <br>
     <div style="text-align:left"><a class="back" href="https://banahawcircle.com/">< Back</a></div>
 </div>

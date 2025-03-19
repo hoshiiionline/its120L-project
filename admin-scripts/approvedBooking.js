@@ -38,7 +38,7 @@ function updateTable(tableSelector, bookings) {
             <td title="Email: ${room.emailAddress} | Contact: ${room.mobileNo}">
                 ${room.firstName} ${room.lastName}
             </td>
-            <td>${room.pricingRateRoom}</td>
+            <td>₱${room.estPricingTotal}</td>
             <td>
                 <select class="status-select" data-id="${room.bookingID}">
                     <option value="PENDING" ${room.status === "PENDING" ? "selected" : ""}>PENDING</option>

@@ -1,7 +1,7 @@
 <?php
-
-$title = "Admin Dashboard";
+$title = "My Dashboard";
 include "../includes/header.php";
+$referenceNumber = $_SESSION['refNoCheck'];
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <link rel="stylesheet" href="../admin-css/pendingBooking.css">
@@ -9,7 +9,8 @@ include "../includes/header.php";
 <body class="background1">
 <div class="wrap">
   <div class="row1">
-    <!-- Left Container: Available Rooms -->
+    
+    <!-- Left Container: Pending Bookings -->
     <div class="col-lg-7 container left-container">
       <h2>Pending Bookings</h2>
       <div class="scrollable-content">
@@ -28,13 +29,19 @@ include "../includes/header.php";
           </tbody>
         </table>
       </div>
+      <!-- Back Button Aligned to the Left -->
+      <div class="col-lg-12" style="text-align: left;">
+        <button class="btn btn-secondary" onclick="window.history.back()">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+      </div>
     </div>
     
+    <!-- Right Container: Detailed Information -->
     <div class="col-lg-4 container mid-container">
       <h2>Detailed Information</h2>
       <div class="scrollable-content">
-        <h4>Customer Information</h4>
-        <table id="customer-info" class="table table-striped">
+        <table id="customer-info" class="table table-striped" style="display:none;">
           <tr>
               <th>Desc.</th>
               <th>Info.</th>
@@ -125,18 +132,10 @@ include "../includes/header.php";
       </table>
       </div>
     </div>
-
-    <div class="col-lg-1 container right-container d-flex align-items-center justify-content-center" style="overflow: hidden;">
-      <a href="approvedBooking.php" class="btn">
-          <i class="fas fa-arrow-right fa-3x"></i>
-      </a>
-    </div>
-
   </div>
 </div>
 
 <?php
-echo '<script src="../admin-scripts/pendingBooking.js"></script>';
-
+echo '<script src="../client-scripts/pendingBooking.js"></script>';
 include "../includes/footer.php"; 
 ?>

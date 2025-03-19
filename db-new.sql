@@ -42,12 +42,19 @@ CREATE TABLE Booking (
     customerID INT,
     dateReservedStart DATE NOT NULL,
     dateReservedEnd DATE NOT NULL,
+    pax INT NOT NULL DEFAULT 1,
+    estPricingTotal DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     status ENUM('PENDING', 'FOR APPROVAL', 'DECLINED', 'CANCEL', 'APPROVED') NOT NULL DEFAULT 'PENDING',
     additionalRequests TEXT,
     FOREIGN KEY (pricingID) REFERENCES Pricing(pricingID) ON DELETE CASCADE,
     FOREIGN KEY (customerID) REFERENCES Customer(customerID) ON DELETE CASCADE
 );
 
+CREATE TABLE Admin (
+    adminID INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
 
 INSERT INTO Room (roomType, roomPackage) VALUES
 ('Batcave 1', 'Nature Villa'),
@@ -92,10 +99,4 @@ VALUES
   (7, 8, 639, 3081.4, 1),
   (8, 10, 80490, 710000, 0);
 
-
-CREATE TABLE Admin (
-    adminID INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
-);
 

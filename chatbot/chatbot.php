@@ -1,5 +1,4 @@
 
-<title>AI Assistant</title>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -70,6 +69,13 @@
       responseBox.textContent = 'You asked: ' + userText;
     }
   </script>
-  <script src="script.js"></script>
+  <script src="../chatbot/script.js"></script>
+  <script>
+  // Add error handling for script loading
+  window.onerror = function(msg, url, lineNo, columnNo, error) {
+      console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError: ' + error);
+      return false;
+  };
+  </script>
 </body>
 </html>
