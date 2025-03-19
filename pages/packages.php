@@ -3,12 +3,14 @@ $title = "Package Selection";
 include "../includes/header.php";
 if(isset($_GET['signal'])){
    	$signal = $_GET['signal'];
-		 $_SESSION['package'] = $signal;
-		 echo $_SESSION['package'];
-		 header('Location: ../pages/roomAvailability.php');
-		 } else {
-				 $_SESSION['package'] = 'invalid';
-		 }
+    if (isset($signal) && in_array($signal, ["package", "room"])){
+      $_SESSION['package'] = $signal;
+      header('Location: ../pages/roomAvailability.php');
+    }
+		 //echo $_SESSION['package'];
+} else {
+    $_SESSION['package'] = 'invalid';
+}
 include "../includes/header.php";
 ?>
 <!--<!DOCTYPE html>

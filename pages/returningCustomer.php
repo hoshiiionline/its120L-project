@@ -2,7 +2,7 @@
 require '../config/config.php';
 $title = "Customer Selection";
 
-if(isset($_GET['signal'])){
+/*if(isset($_GET['signal'])){
     $signal = $_GET['signal'];
     if($signal == 'guest'){
         header('Location: ../pages/packages.php');
@@ -11,7 +11,7 @@ if(isset($_GET['signal'])){
     } else {
         echo "Invalid signal!";
     }
-}
+}*/
 include "../includes/header.php";
 ?>
 
@@ -31,12 +31,12 @@ include "../includes/header.php";
     <h3>Reconnect with nature and spirit—book your stay with us for a rejuvenating retreat of healing, reflection, and inspiration.</h3>
     <div class="options">
         <div class="option-container">
-            <a href="../pages/returningCustomer.php?signal=returning">
+            <a href="../pages/verifyReturningCustomer.php?signal=returning">
                 <div class="label">Returning Guest</div>
             </a>
         </div>
         <div class="option-container">
-            <a href="../pages/returningCustomer.php?signal=guest">
+            <a href="../pages/packages.php?signal=guest">
                 <div class="label">New Guest</div>
             </a>
         </div>
