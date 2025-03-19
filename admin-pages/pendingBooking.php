@@ -69,6 +69,10 @@ include "../includes/header.php";
               <td>Please Select a Record</td>
           </tr>
           <tr>
+              <td>Pax</td>
+              <td>Please Select a Record</td>
+          </tr>
+          <tr>
               <td>Status</td>
               <td>Please Select a Record</td>
           </tr>

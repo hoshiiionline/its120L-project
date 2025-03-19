@@ -12,12 +12,12 @@ $bookingID = isset($_GET["bookingID"]) ? $_GET["bookingID"] : null;
 
 if ($bookingID) {
     $stmt = $conn->prepare("
-    SELECT * FROM booking 
-    INNER JOIN pricing ON booking.pricingID = pricing.pricingID
-    INNER JOIN occupancy ON pricing.occupancyID = occupancy.occupancyID
-    INNER JOIN room on room.roomID = pricing.roomID
-    INNER JOIN customer on booking.customerID = customer.customerID
-    WHERE bookingID = ?
+        SELECT * FROM booking 
+        INNER JOIN pricing ON booking.pricingID = pricing.pricingID
+        INNER JOIN occupancy ON pricing.occupancyID = occupancy.occupancyID
+        INNER JOIN room on room.roomID = pricing.roomID
+        INNER JOIN customer on booking.customerID = customer.customerID
+        WHERE bookingID = ?
     ");
     $stmt->bind_param("i", $bookingID);
     $stmt->execute();
@@ -27,9 +27,9 @@ if ($bookingID) {
     if ($data) {
         $startDate = new DateTime($data['dateReservedStart']);
         $endDate = new DateTime($data['dateReservedEnd']);
-        //$endDate->modify('+1 day'); // Include the last day in the loop
+        $endDate->modify('+1 day'); // Include the last day in the loop
 
-        $period = new DatePeriod($startDate, new DateInterval('P1D'), $endDate);
+        $period = new DatePeriod($startDate->modify('+1 day'), new DateInterval('P1D'), $endDate);
         $weekdayCount = 0;
         $weekendCount = 0;
 

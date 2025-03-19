@@ -12,12 +12,12 @@ $bookingID = isset($_GET["bookingID"]) ? $_GET["bookingID"] : null;
 
 if ($bookingID) {
     $stmt = $conn->prepare("
-    SELECT * FROM booking 
-    INNER JOIN pricing ON booking.pricingID = pricing.pricingID
-    INNER JOIN occupancy ON pricing.occupancyID = occupancy.occupancyID
-    INNER JOIN room on room.roomID = pricing.roomID
-    INNER JOIN customer on booking.customerID = customer.customerID
-    WHERE bookingID = ? AND status = 'PENDING'
+        SELECT * FROM booking 
+        INNER JOIN pricing ON booking.pricingID = pricing.pricingID
+        INNER JOIN occupancy ON pricing.occupancyID = occupancy.occupancyID
+        INNER JOIN room on room.roomID = pricing.roomID
+        INNER JOIN customer on booking.customerID = customer.customerID
+        WHERE bookingID = ?
     ");
     $stmt->bind_param("i", $bookingID);
     $stmt->execute();

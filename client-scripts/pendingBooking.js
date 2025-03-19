@@ -1,5 +1,5 @@
 function reloadBookings() {
-  fetch("../client-api/pendingBooking.php")
+  fetch("../admin-api/pendingBooking.php")
     .then((res) => res.json())
     .then((pendingBookings) => {
       console.log("Pending Bookings:", pendingBookings);
@@ -26,7 +26,7 @@ function updateTable(tableSelector, bookings) {
             <td title="Email: ${room.emailAddress} | Contact: ${room.mobileNo}">
                 ${room.firstName} ${room.lastName}
             </td>
-            <td>${room.pricingRateRoom}</td>
+            <td>₱${room.estPricingTotal}</td>
             <td>
                 <button class="view-booking" data-id="${room.bookingID}">View</button>
             </td>
@@ -68,9 +68,9 @@ function displayBookingDetails(data) {
 
   const weekdayRate = data.pricingRateRoom * 1;
   const weekendRate = data.pricingRateRoom * 1.015;
-  const weekdaySubtotal = weekdayRate * data.weekdayCount;
-  const weekendSubtotal = weekendRate * data.weekendCount;
-  const holidaySubtotal = data.pricingRateRoom * 1.02 * 0;
+  const weekdaySubtotal = weekdayRate * data.weekdayCount * data.pax;
+  const weekendSubtotal = weekendRate * data.weekendCount *data.pax;
+  const holidaySubtotal = data.pricingRateRoom * 1.02 * 0 * data.pax;
   const total = weekdaySubtotal + weekendSubtotal + holidaySubtotal;
 
   if (!detailsContainer || !customerContainer) return;
@@ -89,6 +89,10 @@ function displayBookingDetails(data) {
             <td>${data.dateReservedStart} - ${data.dateReservedEnd}</td>
         </tr>
         <tr>
+            <td>Pax</td>
+            <td>${data.pax}</td>
+        </tr>
+        <tr>
             <td>Status</td>
             <td>
                 ${data.status}
@@ -96,7 +100,7 @@ function displayBookingDetails(data) {
         </tr>
         <tr>
             <td>Price</td>
-            <td>${data.pricingRateRoom}</td>
+            <td>₱${data.pricingRateRoom} per Pax</td>
         </tr>
     `;
 
@@ -166,6 +170,10 @@ function resetInfo() {
         </tr>
         <tr>
             <td>Date</td>
+            <td>Please Select a Record</td>
+        </tr>
+        <tr>
+            <td>Pax</td>
             <td>Please Select a Record</td>
         </tr>
         <tr>
