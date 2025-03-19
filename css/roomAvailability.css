@@ -106,3 +106,9 @@ input {
 button:hover {
   background-color: #425d8a;
 }
+
+.note {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 0.5rem;
+}

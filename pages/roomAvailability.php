@@ -28,6 +28,9 @@ $signal = $_SESSION['package'];
 
     <div class="form2">
         <button id="query-btn" class="button">Submit</button>
+        <div class="note">
+      Note: Check-in time: <b>2:00 PM</b>; Check-out time: <b>12:00 NN</b>. 
+    </div>
     </div>
     <div style="text-align:left"><a class="back" href="../pages/returningCustomer.php">< Back</a></div>
 </div>
