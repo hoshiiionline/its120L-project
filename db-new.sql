@@ -50,6 +50,12 @@ CREATE TABLE Booking (
     FOREIGN KEY (customerID) REFERENCES Customer(customerID) ON DELETE CASCADE
 );
 
+CREATE TABLE Admin (
+    adminID INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
 INSERT INTO Room (roomType, roomPackage) VALUES
 ('Batcave 1', 'Nature Villa'),
 ('Batcave 2', 'Nature Villa'),
