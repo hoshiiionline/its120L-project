@@ -8,9 +8,9 @@ if(isset($_GET['signal'])){
       header('Location: ../pages/roomAvailability.php');
     }
 		 //echo $_SESSION['package'];
-		 } else {
-				 $_SESSION['package'] = 'invalid';
-		 }
+} else {
+    $_SESSION['package'] = 'invalid';
+}
 include "../includes/header.php";
 ?>
 <!--<!DOCTYPE html>

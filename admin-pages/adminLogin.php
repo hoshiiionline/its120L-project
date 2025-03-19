@@ -19,8 +19,8 @@ $query = "INSERT INTO admin (username, password) VALUES (?, ?)";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ss", $adminEmail, $adminPassword);
 $stmt->execute();
-*/
 
+*/
 include "../includes/header.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        $_SESSION['adminID'] = $admin['id'];
+        $_SESSION['adminID'] = $admin['adminID'];
         $_SESSION['username'] = $admin['username'];
         header("Location: pendingBooking.php");
         exit();
